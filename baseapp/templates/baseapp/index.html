@@ -1,0 +1,189 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Bootstrap Tutorial</title>
+    <style>
+        #burger{
+          left: 60% !important;
+          right: 10% !important;
+        }
+        #pizza{
+          left: 10% !important;
+          right: 60% !important;
+        }
+        .carousel-caption{
+            top: 45%;
+            transform: translateY(-50%);
+            bottom: initial;
+        }
+        .carousel-indicators [data-bs-target]{
+            width: 10px !important;
+            height: 10px !important;
+            border-radius: 50%;
+        }
+
+        .carousel-item {
+            -webkit-transform-style: preserve-3d;
+            -moz-transform-style: preserve-3d;
+            transform-style: preserve-3d;
+        }
+        .cartcounter {
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            background-color: #ff6161;
+            color: #f0f0f0;
+        }
+        footer {
+          background-color: black;
+        }  
+        nav {
+          position: fixed;
+          background-color: rgba(0, 0, 0, 0.8);
+        }
+        .carousel {
+          margin-top: 0.8%;
+        }  
+    </style>
+</head>
+<body class="bg-dark">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="#">Navbar</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <!--<a class="nav-link active" aria-current="page" href="#">Home</a>-->
+              <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="#"> <span class="cartcounter d-flex justify-content-center align-items-center">2</span>Cart</a>
+              <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="#">ORDER NOW</a>
+              <a class="nav-link d-flex align-items-center justify-content-center btn rounded-pill btn-outline-danger text-lightlead mx-3" href="#">LOGIN</a>
+            </div>
+          </div>
+        </div>
+    </nav>
+    <!-- END OF NAVBAR -->
+
+
+    <br>
+    <br>
+
+    <!-- CAROUSEL -->
+    <section>
+        <div class="container">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <div class="carousel-caption" id = 'pizza'>
+                    <p class="h2 text-light">Try the all new Paneer Passion pizza today!</p>
+                    <p class="text-light fs-5">Lots of cheese, spices, an assortment of veggies, and the best of all, paneer. Order today!</p>
+                </div>
+                <img src="{% static 'images/p.png' %}" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <div class="carousel-caption" id = 'burger'>
+                    <p class="h2 text-dark">The New ExtraSaucy Burgers</p>
+                    <p class="text-dark fs-5">We took the burgers you love and made them even better. Order today!</p>
+                </div>
+                <img src="{% static 'images/burger.jfif' %}" class="d-block w-100" alt="...">
+              </div>
+              <div class="carousel-item">
+                <div class="carousel-caption" id = 'sides'>
+                    <p class="h2 text-light">The Best Fast Food Sides</p>
+                    <p class="text-light fs-5">Choose from our wide range of fries,<br> nuggets, soft drinks, and many more<e/p>
+                </div>
+                <img src="{% static 'images/sides.jpg.png' %}" class="d-block w-100" alt="...">
+              </div>
+              
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+          </div>
+        </div>
+        </div>
+
+    </section>
+    <!-- END OF CAROUSEL -->
+  
+    <br>
+    <br>
+    <br>
+    <br>
+    
+
+
+
+    <!-- CARD SECTION -->
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-4 col-lg-4 d-flex justify-content-center">
+          <div class="card text-center bg-secondary" style="width: 18rem;">
+            <img src="{% static 'images/menu.jpg' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title text-light">Checkout The Menu!</h5>
+              <p class="lead card-text text-light">Head to the menu page to see everything you can order</p>
+              <a href="" class="btn btn-danger">MENU</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4 col-lg-4 d-flex justify-content-center">
+          <div class="card text-center bg-secondary" style="width: 18rem;">
+            <img src="{% static 'images/login.jpg' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title text-light">Login</h5>
+              <p class="lead card-text text-light">Login to place an order, see your past orders, and more</p>
+              <a href="" class="btn btn-danger">LOGIN</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4 col-lg-4 d-flex justify-content-center">
+          <div class="card text-center bg-secondary" style="width: 18rem;">
+            <img src="{% static 'images/signup.jpg' %}" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title text-light">Signup</h5>
+              <p class="lead card-text text-light">Create an account to be able to place orders</p>
+              <a href="" class="btn btn-danger">SIGNUP</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END OF CARD SECTION -->
+
+
+    <br>
+    <br>
+    <br>
+    
+    <!-- Footer -->
+  <footer class="page-footer">
+  <div class="footer-copyright text-center text-light py-3">© 2020 Copyright:<a href="https://mdbootstrap.com/"> MDBootstrap.com</a></div>
+  </footer>
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+</body>
+</html>
