@@ -1,3 +1,31 @@
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
+
+class Customer(models.Model):
+    user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
+    CustomerName = models.CharField(max_length=300, null=True, blank=True)
+    Address = models.TextField(null=True, blank=True)
+    DateOfBirth = models.DateField(auto_now_add=False)
+
+class Products(models.Model):
+    ProductID = models.AutoField(primary_key=True)
+    ProductName = models.CharField(max_length=200, null=True, blank=True)
+    Stock = models.IntegerField()
+    Category = models.CharField(max_length=200, null=True, blank=True)
+    Price = models.IntegerField()
+    Description = models.CharField(max_length=600, blank=True, null=True)
+    Vegetarian = models.BooleanField(default=False)
+
+class Cart(models.Model):
+    Cart_ID = models.AutoField(primary_key=True)
+    CustomerID = models.ForeignKey(Customer,on_delete=models.SET_NULL, null=True)
+    ProductID = models.ForeignKey(Products,on_delete=models.SET_NULL, null=True)
+    
+
+class Orders(models.Model):
+    OrderID = models.AutoField(primary_key=True)
+    CustomerID = models.ForeignKey(Customer,on_delete=models.SET_NULL, null=True)
+    ProductID = models.ForeignKey(Products,on_delete=models.SET_NULL, null=True)
+    DateOrdered = models.DateField(auto_now_add=True)
+    OrderStatus = models.CharField(max_length=100, null=True, blank=True)
