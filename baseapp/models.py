@@ -18,6 +18,8 @@ class Products(models.Model):
     Vegetarian = models.BooleanField(default=False)
     Image = models.ImageField(null= True, blank=True)
 
+    def __str__(self):
+        return self.ProductName
 class Cart(models.Model):
     Cart_ID = models.AutoField(primary_key=True)
     CustomerID = models.ForeignKey(Customer,on_delete=models.SET_NULL, null=True)
