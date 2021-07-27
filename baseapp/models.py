@@ -16,6 +16,7 @@ class Products(models.Model):
     Price = models.IntegerField()
     Description = models.CharField(max_length=600, blank=True, null=True)
     Vegetarian = models.BooleanField(default=False)
+    Image = models.ImageField(null= True, blank=True)
 
 class Cart(models.Model):
     Cart_ID = models.AutoField(primary_key=True)
