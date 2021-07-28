@@ -5,6 +5,7 @@ from .forms import CreateUserForm, CustomerForm
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.contrib import messages
+from .models import *
 # Create your views here.
 
 
@@ -18,13 +19,15 @@ def RegisterView(request):
             form.save()
             new_user = authenticate(username=form.cleaned_data['username'],password=form.cleaned_data['password1'],)
             login(request,new_user)
-            return redirect('accountsetup/')
+            return redirect(reverse('setup'))
 
     context = {'form': form}
     return render(request, 'baseapp/register.html', context)
 
 def LoginView(request):
     context = {}
+    if request.user.is_authenticated:
+        return redirect(reverse('home'))
     if request.method == 'POST':
         user = authenticate(request, username=request.POST.get('Username'),password=request.POST.get('Password'))
         
@@ -62,4 +65,11 @@ def empty(request):
     return redirect('home/')
 
 def home(request):
+    if request.user.is_authenticated:
+        try:
+            u = Customer.objects.get(user=request.user)
+        except:
+            return render(request, 'baseapp/index.html')
+        return render(request, 'baseapp/index.html', {'u':u})
+
     return render(request, 'baseapp/index.html')

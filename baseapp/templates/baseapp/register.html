@@ -43,23 +43,25 @@
         }
         ::-webkit-calendar-picker-indicator {
         filter: invert(100%);
-    }
+        }
+        .nav-link{
+          color: #f0f0f0 !important;
+        }
     </style>
 </head>
 <body class="bg-dark">
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-          <a class="navbar-brand" href="#">Navbar</a>
+          <a class="navbar-brand" href="{% url 'home' %}">Navbar</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <!--<a class="nav-link active" aria-current="page" href="#">Home</a>-->
-              <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="#"> <span class="cartcounter d-flex justify-content-center align-items-center">2</span>Cart</a>
               <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="#">ORDER NOW</a>
-              <a class="nav-link d-flex align-items-center justify-content-center btn rounded-pill btn-outline-danger text-lightlead mx-3" href="#">LOGIN</a>
+              <a class="nav-link d-flex align-items-center justify-content-center btn rounded-pill btn-outline-danger text-lightlead mx-3" href="{% url 'login' %}">LOGIN</a>
             </div>
           </div>
         </div>
@@ -74,7 +76,7 @@
     <div class="container display-4 text-light d-flex justify-content-center"> Create an Account</div>
     <!-- END OF TITLE -->
     <br>
-    <br>
+
 
     <div class="container">
         <div class="row d-flex justify-content-center">
@@ -109,9 +111,10 @@
                                 </div>
                                 <br>
                                     {% endfor %}
+                                <a href="{% url 'login' %}">Already Have an Account? Login</a><br><br>
                                 <div class="row">
                                     <div class="col"></div>
-                                    <div class="col"><input class="btn btn-outline-primary" type="submit" name="Create User" id=""></div>
+                                    <div class="col"><input class="btn btn-outline-primary" type="submit" name="Create User" value="CREATE ACCOUNT"></div>
                                     <div class="col"></div>
                                 </div>
                         </form>
@@ -122,6 +125,11 @@
         </div>
     </div>
 
+    <br>
+
+    <footer class="page-footer">
+        <div class="footer-copyright text-center text-light py-3">© 2020 Copyright:<a href="https://mdbootstrap.com/"> MDBootstrap.com</a></div>
+    </footer>
 
 
 
