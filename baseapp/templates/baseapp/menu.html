@@ -197,9 +197,13 @@
                     <div class="col text-warning fs-4 d-flex align-items-center justify-content-center">₹{{ object.Price }}</div>
                     <div class="col d-flex align-items-center justify-content-center">
                       {% if request.user.is_authenticated %}
+                      {% if object in AllCartItems %}
+                      <a href="/cart/" class="btn btn-outline-warning">Go To Cart</a>
+                      {% else %}
                       <form >
                         <button type="submit" class="btn btn-primary cartadd" id="{{object.ProductID}}" name="ProductID" value="{{object.ProductID}}">Add To Cart</button>
                       </form>
+                      {% endif %}
                       {% else %}
                       <a href="{% url 'login' %}?next={% url 'menu' %}" class="btn btn-primary" onclick="alert('You need to login first to add to cart')">Add To Cart</a> 
                       {% endif %}
@@ -231,9 +235,13 @@
                     <div class="col text-warning fs-4 d-flex align-items-center justify-content-center">₹{{ object.Price }}</div>
                     <div class="col d-flex align-items-center justify-content-center">
                       {% if request.user.is_authenticated %}
+                      {% if object in AllCartItems %}
+                      <a href="/cart/" class="btn btn-outline-warning">Go To Cart</a>
+                      {% else %}
                       <form >
                         <button type="submit" class="btn btn-primary cartadd" id="{{object.ProductID}}" name="ProductID" value="{{object.ProductID}}">Add To Cart</button>
                       </form>
+                      {% endif %}
                       {% else %}
                       <a href="{% url 'login' %}?next={% url 'menu' %}" class="btn btn-primary" onclick="alert('You need to login first to add to cart')">Add To Cart</a> 
                       {% endif %}
@@ -265,9 +273,13 @@
                     <div class="col text-warning fs-4 d-flex align-items-center justify-content-center">₹{{ object.Price }}</div>
                     <div class="col d-flex align-items-center justify-content-center">
                       {% if request.user.is_authenticated %}
+                      {% if object in AllCartItems %}
+                      <a href="/cart/" class="btn btn-outline-warning">Go To Cart</a>
+                      {% else %}
                       <form>
                         <button type="submit" class="btn btn-primary cartadd" id="{{object.ProductID}}" name="ProductID" value="{{object.ProductID}}">Add To Cart</button>
                       </form>
+                      {% endif %}
                       {% else %}
                       <a href="{% url 'login' %}?next={% url 'menu' %}" class="btn btn-primary" onclick="alert('You need to login first to add to cart')">Add To Cart</a> 
                       {% endif %}

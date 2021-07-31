@@ -29,7 +29,7 @@ class Cart(models.Model):
 
 class Orders(models.Model):
     OrderID = models.AutoField(primary_key=True)
-    OrderNumber = models.IntegerField(null=True)
+    OrderNumber = models.CharField(null=True, max_length=400)
     CustomerID = models.ForeignKey(Customer,on_delete=models.SET_NULL, null=True)
     ProductID = models.ForeignKey(Products,on_delete=models.SET_NULL, null=True)
     DateOrdered = models.DateField(auto_now_add=True)

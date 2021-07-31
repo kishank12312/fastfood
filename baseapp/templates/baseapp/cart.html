@@ -70,7 +70,7 @@
               <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'home' %}">HOME</a>
               <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'menu' %}">MENU</a>
               <a class="nav-link dropdown-toggle d-flex justify-content-center align-items-center" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i class="bi-person-circle"></i>
+                <i style="font-size: 1.6em;" class="bi-person-circle"></i>
               </a>
               <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
                 <li><a class="dropdown-item d-flex justify-content-center" href="#">View Profile</a></li>
@@ -149,7 +149,7 @@
                               </div>
                           </div>
                       <br>
-                      <a href="#" id="orderbutton" class="btn btn-primary">Place Order</a>
+                      <a href="{% url 'ordersummary' %}" id="orderbutton" class="btn btn-primary">Place Order</a>
                     </div>
                   </div>
             </div>

@@ -156,8 +156,6 @@ def CartView(request):
         for obj in queryset:
             cartitems.append(obj.ProductID)
         context = {'cartitems':cartitems}
-
-
         if request.method == "GET":
             if request.GET.get('ProductID') is not None:
                 ProductID = request.GET.get('ProductID')
@@ -167,5 +165,50 @@ def CartView(request):
         return render(request, 'baseapp/cart.html', context)
     
     return redirect(reverse('login'))
+
+def summary(request):
+    if request.user.is_authenticated:
+        currentCustomer = Customer.objects.get(user=request.user)
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context = {'objects':cartitems}
+        totalcost = 0
+        for product in cartitems:
+            totalcost += product.Price
+        context['totalcost'] = totalcost
+
+
+        if request.method == 'POST':
+            uid = request.POST.get('csrfmiddlewaretoken')
+            for product in cartitems:
+                newOrder = Orders(
+                    OrderNumber = uid,
+                    CustomerID = currentCustomer,
+                    ProductID = product,
+                    OrderStatus = 'Order Success',
+                )
+                newOrder.save(force_insert=True)
+                instance = Cart.objects.get(CustomerID=currentCustomer, ProductID = product)
+                instance.delete()
+            return redirect(reverse('ordersuccess'))
+
+        return render(request, 'baseapp/summary.html', context)
+    
+    return redirect(reverse('login'))
+
+def success(request):
+    if request.user.is_authenticated:
+        context = {}
+        currentCustomer = Customer.objects.get(user=request.user)
+        context['u'] = currentCustomer
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context['AllCartItems'] = cartitems
+        return render(request, 'baseapp/success.html', context)
+    else:
+        return redirect(reverse('login'))
         
-    pass
