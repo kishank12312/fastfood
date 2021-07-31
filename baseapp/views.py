@@ -69,13 +69,17 @@ def empty(request):
     return redirect('home/')
 
 def home(request):
+    context = {}
     if request.user.is_authenticated:
-        try:
-            u = Customer.objects.get(user=request.user)
-        except:
-            return render(request, 'baseapp/index.html')
-        #cartitems = Cart.objects.filter(CustomerID= u.id)
-        return render(request, 'baseapp/index.html', {'u':u})
+        currentCustomer = Customer.objects.get(user=request.user)
+        context['u'] = currentCustomer
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context['AllCartItems'] = cartitems
+        return render(request, 'baseapp/index.html', context)
+
 
     return render(request, 'baseapp/index.html')
 
@@ -141,3 +145,27 @@ def Menu(request):
 
 
     return render(request, 'baseapp/menu.html', context)
+
+
+def CartView(request):
+    if request.user.is_authenticated:
+        print(request.user)
+        currentCustomer = Customer.objects.get(user=request.user)
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context = {'cartitems':cartitems}
+
+
+        if request.method == "GET":
+            if request.GET.get('ProductID') is not None:
+                ProductID = request.GET.get('ProductID')
+                product = Products.objects.get(ProductID = int(ProductID))
+                instance = Cart.objects.get(CustomerID=currentCustomer, ProductID = product)
+                instance.delete()
+        return render(request, 'baseapp/cart.html', context)
+    
+    return redirect(reverse('login'))
+        
+    pass

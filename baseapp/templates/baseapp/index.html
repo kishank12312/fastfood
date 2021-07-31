@@ -34,11 +34,14 @@
             transform-style: preserve-3d;
         }
         .cartcounter {
+            border: solid 1px rgb(0, 247, 255);
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            background-color: #ff6161;
-            color: #f0f0f0;
+            width: fit-content;
+            height: fit-content;
+            color: rgb(0, 247, 255);
+            line-height: 1em;
+            padding-top: 1.5px;
+            padding-bottom: 3px;
         }
         footer {
           background-color: black;
@@ -73,7 +76,11 @@
           <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <!--<a class="nav-link active" aria-current="page" href="#">Home</a>-->
-              {% if request.user.is_authenticated %}<a class="nav-link d-flex align-items-center justify-content-center mx-3" href="#"> <span class="cartcounter d-flex justify-content-center align-items-center">2</span>Cart</a>{% endif %}
+              {% if request.user.is_authenticated %}
+              <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'cart' %}"> 
+                <span class="cartcounter d-flex justify-content-center align-items-center px-1">{{ AllCartItems|length }}</span> &nbsp;Cart
+              </a>
+              {% endif %}
               <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'menu' %}">ORDER NOW</a>
               {% if request.user.is_authenticated %}
               <a class="nav-link dropdown-toggle d-flex justify-content-center align-items-center" href="#" id="navbarDarkDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
