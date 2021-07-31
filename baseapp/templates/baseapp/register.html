@@ -60,6 +60,7 @@
           <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
             <div class="navbar-nav">
               <!--<a class="nav-link active" aria-current="page" href="#">Home</a>-->
+              <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'home' %}">HOME</a>
               <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="#">ORDER NOW</a>
               <a class="nav-link d-flex align-items-center justify-content-center btn rounded-pill btn-outline-danger text-lightlead mx-3" href="{% url 'login' %}">LOGIN</a>
             </div>
@@ -90,7 +91,11 @@
                             {% csrf_token %}
                             {% for field in form %}
                             <div class="row">
-                            <div class="col-1 d-flex align-items-center"><i class = 'bi-person' style="color: #f0f0f0;"></i></div>
+                            <div class="col-1 d-flex align-items-center">
+                                {% if field.name == 'username' %}<i class = 'bi-person' style="color: #f0f0f0;"></i>
+                                {% elif field.name == 'email' %}<i class = 'bi-envelope' style="color: #f0f0f0;"></i>
+                                {% else %}<i class = 'bi-key-fill' style="color: #f0f0f0;"></i>{% endif %}
+                            </div>
                                     <div class="col-10">
                                     <div class="form-floating">
                                         {{ field }} 

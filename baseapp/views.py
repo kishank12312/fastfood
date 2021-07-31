@@ -11,7 +11,8 @@ from .models import *
 
 def RegisterView(request):
     form = CreateUserForm()
-
+    if request.user.is_authenticated:
+        return redirect(reverse('home'))
     if request.method == "POST":
 
         form = CreateUserForm(request.POST)
@@ -33,7 +34,10 @@ def LoginView(request):
         
         if user is not None:
             login(request, user)
-            return redirect(reverse('home'))
+            if request.GET.get('next') == '/menu/':
+                return redirect(reverse('menu'))
+            else:
+                return redirect(reverse('home'))
         else:
             messages.info(request, 'Username or Password is incorrect.')
 
@@ -70,6 +74,70 @@ def home(request):
             u = Customer.objects.get(user=request.user)
         except:
             return render(request, 'baseapp/index.html')
+        #cartitems = Cart.objects.filter(CustomerID= u.id)
         return render(request, 'baseapp/index.html', {'u':u})
 
     return render(request, 'baseapp/index.html')
+
+
+def Menu(request):
+    burgers = Products.objects.filter(Category='Burger')
+    burgergrouped,burgerset = [],[]
+    for burger in burgers:
+        if len(burgerset) < 4:
+            burgerset.append(burger)
+        if len(burgerset) == 4:
+            burgergrouped.append(burgerset)
+            burgerset = []
+    if len(burgerset) > 0:
+        burgergrouped.append(burgerset)
+    pizzas = Products.objects.filter(Category='Pizza')
+    pizzagrouped,pizzaset = [],[]
+    for pizza in pizzas:
+        if len(pizzaset) < 4:
+            pizzaset.append(pizza)
+        if len(pizzaset) == 4:
+            pizzagrouped.append(pizzaset)
+            pizzaset = []
+    if len(pizzaset) > 0:
+        pizzagrouped.append(pizzaset)
+    wraps = Products.objects.filter(Category='Wraps')
+    wrapgrouped,wrapset = [],[]
+    for wrap in wraps:
+        if len(wrapset) < 4:
+            wrapset.append(wrap)
+        if len(wrapset) == 4:
+            wrapgrouped.append(wrapset)
+            wrapset = []
+    if len(wrapset) > 0:
+        wrapgrouped.append(wrapset)
+    sides = Products.objects.filter(Category='Sides')
+    sidegrouped,sideset = [],[]
+    for side in sides:
+        if len(sideset) < 4:
+            sideset.append(side)
+        if len(sideset) == 4:
+            sidegrouped.append(sideset)
+            sideset = []
+    if len(sideset) > 0:
+        sidegrouped.append(sideset)
+    context = {'burgergrouped':burgergrouped, 'pizzagrouped':pizzagrouped, 'wrapgrouped': wrapgrouped, 'sidegrouped':sidegrouped}
+    if request.user.is_authenticated:
+        currentCustomer = Customer.objects.get(user=request.user)
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context['AllCartItems'] = cartitems
+    else:
+        context['AllCartItems'] = None
+    if request.method == 'GET':
+        ProductID = request.GET.get('ProductID')
+        if ProductID is not None:
+            currentCustomer = Customer.objects.get(user=request.user)
+            addedproduct = Products.objects.get(ProductID = int(ProductID))
+            cartitem = Cart(CustomerID= currentCustomer, ProductID= addedproduct)
+            cartitem.save(force_insert=True)
+
+
+    return render(request, 'baseapp/menu.html', context)

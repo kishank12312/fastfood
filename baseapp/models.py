@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import tree
 
 
 class Customer(models.Model):
@@ -28,6 +29,7 @@ class Cart(models.Model):
 
 class Orders(models.Model):
     OrderID = models.AutoField(primary_key=True)
+    OrderNumber = models.IntegerField(null=True)
     CustomerID = models.ForeignKey(Customer,on_delete=models.SET_NULL, null=True)
     ProductID = models.ForeignKey(Products,on_delete=models.SET_NULL, null=True)
     DateOrdered = models.DateField(auto_now_add=True)
