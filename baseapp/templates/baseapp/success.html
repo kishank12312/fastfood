@@ -33,10 +33,26 @@
         body{  
           background-color: #1d1d1d !important;
         }
+        #page-container {
+        position: relative;
+        min-height: 100vh;
+        }
+        #content-wrap {
+          padding-bottom: 3rem;    /* Footer height */
+        }
+
+        #footer {
+          position: absolute;
+          bottom: 0;
+          width: 100%;
+          height: 3.5rem;            /* Footer height */
+        }
         
     </style>
 </head>
 <body>
+<div id="page-container">
+<div id="content-wrap">
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
@@ -48,6 +64,7 @@
             <div class="navbar-nav">
               <!--<a class="nav-link active" aria-current="page" href="#">Home</a>-->
               {% if request.user.is_authenticated %}
+              <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'home' %}">HOME</a>
               <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'cart' %}"> 
                 <span class="cartcounter d-flex justify-content-center align-items-center px-1">{{ AllCartItems|length }}</span> &nbsp;Cart
               </a>
@@ -104,10 +121,13 @@
     <br>
     <br>
     
-    <!-- Footer -->
-  <footer class="page-footer">
-  <div class="footer-copyright text-center text-light py-3">© 2020 Copyright:<a href="https://mdbootstrap.com/"> MDBootstrap.com</a></div>
-  </footer>
+</div>  
+<!-- Footer -->
+<footer id="footer" class="page-footer">
+<div class="footer-copyright text-center text-light py-3">© 2020 Copyright:<a href="https://mdbootstrap.com/"> MDBootstrap.com</a></div>
+</footer>
+</div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>
 </html>
