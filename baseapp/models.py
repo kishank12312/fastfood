@@ -34,3 +34,4 @@ class Orders(models.Model):
     ProductID = models.ForeignKey(Products,on_delete=models.SET_NULL, null=True)
     DateOrdered = models.DateField(auto_now_add=True)
     OrderStatus = models.CharField(max_length=100, null=True, blank=True)
+    Address = models.TextField(null=True, blank=True)

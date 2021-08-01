@@ -178,15 +178,18 @@ def summary(request):
         for product in cartitems:
             totalcost += product.Price
         context['totalcost'] = totalcost
+        context['cust'] = currentCustomer
 
 
         if request.method == 'POST':
             uid = request.POST.get('csrfmiddlewaretoken')
+            address = request.POST.get('Address')
             for product in cartitems:
                 newOrder = Orders(
                     OrderNumber = uid,
                     CustomerID = currentCustomer,
                     ProductID = product,
+                    Address = address,
                     OrderStatus = 'Order Success',
                 )
                 newOrder.save(force_insert=True)
@@ -211,4 +214,10 @@ def success(request):
         return render(request, 'baseapp/success.html', context)
     else:
         return redirect(reverse('login'))
-        
+
+
+def orderhistory(request):
+    if request.user.is_authenticated:
+        return render(request, 'baseapp/orders.html')
+    else:
+        return redirect(reverse('login'))
