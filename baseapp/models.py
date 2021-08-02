@@ -35,3 +35,4 @@ class Orders(models.Model):
     DateOrdered = models.DateField(auto_now_add=True)
     OrderStatus = models.CharField(max_length=100, null=True, blank=True)
     Address = models.TextField(null=True, blank=True)
+    ItemPrice = models.IntegerField(null=True)

@@ -191,6 +191,7 @@ def summary(request):
                     ProductID = product,
                     Address = address,
                     OrderStatus = 'Order Success',
+                    ItemPrice = product.Price,
                 )
                 newOrder.save(force_insert=True)
                 instance = Cart.objects.get(CustomerID=currentCustomer, ProductID = product)
@@ -218,6 +219,55 @@ def success(request):
 
 def orderhistory(request):
     if request.user.is_authenticated:
-        return render(request, 'baseapp/orders.html')
+        currentCustomer = Customer.objects.get(user=request.user)
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context = {'cartitems':cartitems}
+        AllOrderedObjects = Orders.objects.filter(CustomerID= currentCustomer).order_by('OrderNumber')
+        print(AllOrderedObjects)
+        if len(AllOrderedObjects) == 0:
+            context['SeparateOrders'] = [] 
+            context['OrderCosts'] = []
+            return render(request, 'baseapp/orders.html', context)
+        SeparateOrders = []
+        TempOrderNum = AllOrderedObjects[0].OrderNumber
+        o = []
+        for Object in AllOrderedObjects:
+            if Object.OrderNumber == TempOrderNum:
+                print("hello")
+                o.append(Object)
+            else:
+                SeparateOrders.append(o)
+                o = []
+                o.append(Object)
+                TempOrderNum = Object.OrderNumber
+        if SeparateOrders == []:
+            SeparateOrders.append(o)
+        OrderCosts = []
+        for OrderSet in SeparateOrders:
+            TempCost = 0
+            for IndividualOrder in OrderSet:
+                TempCost += IndividualOrder.ItemPrice
+            OrderCosts.append(TempCost)
+        context['SeparateOrders'] = SeparateOrders 
+        context['OrderCosts'] = OrderCosts
+        if request.method == "GET":
+            if request.GET.get('OrderView') is not None:
+                onum = request.GET.get('OrderView')
+                requiredOrder = None
+                index = 0
+                for Order in SeparateOrders:
+                    if Order[0].OrderNumber == onum:
+                        requiredOrder = Order
+                        total = OrderCosts[index]
+                    index+=1
+                context = {}
+                context['Order'] = requiredOrder
+                context['total'] = total
+                return render(request, 'baseapp/orderview.html', context)
+
+        return render(request, 'baseapp/orders.html', context)
     else:
         return redirect(reverse('login'))
