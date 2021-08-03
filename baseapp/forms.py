@@ -34,8 +34,8 @@ class CustomerForm(ModelForm):
         model = Customer
         fields = ['CustomerName', 'Address', 'DateOfBirth']
         labels = {
-            'CustomerName': 'Please enter your First Name and Last Name separated by a space:',
-            'DateOfBirth': 'Your Date of Birth:',
+            'CustomerName': 'Please enter your First Name and Last Name separated by a space*:',
+            'DateOfBirth': 'Your Date of Birth*:',
         }
         widgets = {
             'DateOfBirth': DateInput(),

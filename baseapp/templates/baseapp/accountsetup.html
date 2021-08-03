@@ -90,11 +90,12 @@
       <div class="row">
         <div class="col"></div>
         <div class="col-10 col-sm-9 col-md-8 col-lg-5 col-xl-4">
+          <p class="text-muted">Fields marked * are required fields</p>
           <form action="" method="POST">
             {% csrf_token %}
             {% for field in form %}
-            {{ field.label_tag }}
-            <br>
+            <div class="lead">{{ field.label_tag }}</div>
+            {% if field.label == 'Address' %} <p class="text-danger">This will be your stored address, can be changed later or skipped as of now</p> {% endif %}
             {{ field }} 
             <br>
             {% endfor %}
@@ -120,5 +121,9 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-</body>
+    <script>
+      document.getElementById('id_CustomerName').required = true;
+    </script>
+
+  </body>
 </html>

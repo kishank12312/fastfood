@@ -99,7 +99,7 @@
           <ul style="margin-right: 4.9%; margin-left: 4.9%;" class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
             <center><i id="profileIcon" class="bi-person-circle" style="font-size: 5em;"></i></center>
             <center><p class="lead fs-6">Logged in as: {{request.user.username}}</p></center>
-            <li><a class="dropdown-item d-flex justify-content-center" href="#">View Profile</a></li>
+            <li><a class="dropdown-item d-flex justify-content-center" href="{% url 'profile' %}">View Profile</a></li>
             <li><a class="dropdown-item d-flex justify-content-center" href="{% url 'orders' %}">View Orders</a></li>
             <li><a class=" btn btn-outline-danger dropdown-item d-flex justify-content-center" href="{% url 'logout' %}">LOGOUT</a></li>
           </ul>

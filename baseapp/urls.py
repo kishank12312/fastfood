@@ -12,5 +12,10 @@ urlpatterns = [
     path('login/', views.LoginView, name='login'),
     path('logout/', views.LogoutView, name='logout'),
     path('register/', views.RegisterView, name='register'),
+    path('profile/', views.ProfileView, name='profile'),
+    path('namechange/', views.NameChange, name='namechange'),
+    path('addresschange/', views.AddressChange, name='addresschange'),
+    path('addressremove/', views.AddressRemove, name='addressremove'),
+    path('addressadd/', views.AddressAdd, name='addressadd'),
     path('accountsetup/', views.SetUp, name='setup'),
 ]

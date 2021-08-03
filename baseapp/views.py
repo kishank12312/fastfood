@@ -149,7 +149,6 @@ def Menu(request):
 
 def CartView(request):
     if request.user.is_authenticated:
-        print(request.user)
         currentCustomer = Customer.objects.get(user=request.user)
         queryset = Cart.objects.filter(CustomerID=currentCustomer)
         cartitems = []
@@ -226,7 +225,6 @@ def orderhistory(request):
             cartitems.append(obj.ProductID)
         context = {'cartitems':cartitems}
         AllOrderedObjects = Orders.objects.filter(CustomerID= currentCustomer).order_by('OrderNumber')
-        print(AllOrderedObjects)
         if len(AllOrderedObjects) == 0:
             context['SeparateOrders'] = [] 
             context['OrderCosts'] = []
@@ -236,7 +234,6 @@ def orderhistory(request):
         o = []
         for Object in AllOrderedObjects:
             if Object.OrderNumber == TempOrderNum:
-                print("hello")
                 o.append(Object)
             else:
                 SeparateOrders.append(o)
@@ -269,5 +266,109 @@ def orderhistory(request):
                 return render(request, 'baseapp/orderview.html', context)
 
         return render(request, 'baseapp/orders.html', context)
+    else:
+        return redirect(reverse('login'))
+
+def ProfileView(request):
+    if request.user.is_authenticated:
+        context = {}
+        currentCustomer = Customer.objects.get(user=request.user)
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context['cartitems'] = cartitems
+        context['customer'] = currentCustomer
+        AllOrderedObjects = Orders.objects.filter(CustomerID= currentCustomer).order_by('OrderNumber')
+        if len(AllOrderedObjects) == 0:
+            context['SeparateOrders'] = [] 
+            context['OrderCosts'] = []
+            return render(request, 'baseapp/orders.html', context)
+        SeparateOrders = []
+        TempOrderNum = AllOrderedObjects[0].OrderNumber
+        o = []
+        for Object in AllOrderedObjects:
+            if Object.OrderNumber == TempOrderNum:
+                o.append(Object)
+            else:
+                SeparateOrders.append(o)
+                o = []
+                o.append(Object)
+                TempOrderNum = Object.OrderNumber
+        if SeparateOrders == []:
+            SeparateOrders.append(o)
+        context['separateorders'] = SeparateOrders
+        return render(request, 'baseapp/profile.html', context)
+    else:
+        return redirect(reverse('login'))
+
+def NameChange(request):
+    if request.user.is_authenticated:
+        context = {}
+        currentCustomer = Customer.objects.get(user=request.user)
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context['cartitems'] = cartitems
+        context['customer'] = currentCustomer
+        if request.method == 'POST':
+            new = request.POST.get('NewName')
+            currentCustomer.CustomerName = new
+            currentCustomer.save(force_update=True)
+            return redirect(reverse('profile'))
+        return render(request, 'baseapp/namechange.html', context)
+    else:
+        return redirect(reverse('login'))
+def AddressRemove(request):
+    if request.user.is_authenticated:
+        context = {}
+        currentCustomer = Customer.objects.get(user=request.user)
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context['cartitems'] = cartitems
+        context['customer'] = currentCustomer
+        currentCustomer.Address = ""
+        currentCustomer.save(force_update=True)
+        return render(request, 'baseapp/addressremove.html', context)
+    else:
+        return redirect(reverse('login'))
+def AddressAdd(request):
+    if request.user.is_authenticated:
+        context = {}
+        currentCustomer = Customer.objects.get(user=request.user)
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context['cartitems'] = cartitems
+        context['customer'] = currentCustomer
+        if request.method == 'POST':
+            new = request.POST.get('NewAddress')
+            currentCustomer.Address = new
+            currentCustomer.save(force_update=True)
+            return redirect(reverse('profile'))
+        return render(request, 'baseapp/addAdress.html', context)
+    else:
+        return redirect(reverse('login'))
+def AddressChange(request):
+    if request.user.is_authenticated:
+        context = {}
+        currentCustomer = Customer.objects.get(user=request.user)
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context['cartitems'] = cartitems
+        context['customer'] = currentCustomer
+        if request.method == 'POST':
+            new = request.POST.get('NewAddress')
+            currentCustomer.Address = new
+            currentCustomer.save(force_update=True)
+            return redirect(reverse('profile'))
+        return render(request, 'baseapp/addresschange.html', context)
+
     else:
         return redirect(reverse('login'))
