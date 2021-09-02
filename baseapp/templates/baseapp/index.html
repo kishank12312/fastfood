@@ -70,7 +70,9 @@
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
-          <a class="navbar-brand" href="{% url 'home' %}">Navbar</a>
+          <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/Logo.png' %}" alt="" height="35em">
+          </a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -104,7 +106,9 @@
     </nav>
     <!-- END OF NAVBAR -->
 
-
+    <br class="d-block d-xl-none">
+    <br class="d-block d-xl-none">
+    <br class="d-block d-xl-none">
     <br>
     <br>
 
@@ -120,22 +124,26 @@
             <div class="carousel-inner">
               <div class="carousel-item active">
                 <div class="carousel-caption" id = 'pizza'>
-                    <p class="h2 text-light">Try the all new Paneer Passion pizza today!</p>
-                    <p class="text-light fs-5">Lots of cheese, spices, an assortment of veggies, and the best of all, paneer. Order today!</p>
+                    <p class="h2 text-light d-none d-md-block">Try the all new Paneer Passion pizza today!</p>
+                    <p class="text-light fs-5 d-none d-md-block">Lots of cheese, spices, an assortment of veggies, and the best of all, paneer. Order today!</p>
+                    <p class="h5 text-light d-block d-md-none">The New <br> Paneer Passion Pizza!</p>
                 </div>
                 <img src="{% static 'images/p.png' %}" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
                 <div class="carousel-caption" id = 'burger'>
-                    <p class="h2 text-dark">The New ExtraSaucy Burgers</p>
-                    <p class="text-dark fs-5">We took the burgers you love and made them even better. Order today!</p>
+                    <p class="h2 text-dark d-none d-md-block">The New ExtraSaucy Burgers</p>
+                    <p class="text-dark fs-5 d-none d-md-block">We took the burgers you love and made them even better. Order today!</p>
+                    <p class="h5 text-light d-block d-md-none">Wide Range <br> of Burgers!</p>
                 </div>
                 <img src="{% static 'images/burger.jfif' %}" class="d-block w-100" alt="...">
               </div>
               <div class="carousel-item">
                 <div class="carousel-caption" id = 'sides'>
-                    <p class="h2 text-light">The Best Fast Food Sides</p>
-                    <p class="text-light fs-5">Choose from our wide range of fries,<br> nuggets, soft drinks, and many more<e/p>
+                    <p class="h2 text-light d-none d-md-block">The Best Fast Food Sides</p>
+                    <p class="text-light d-none d-md-block">Choose from our wide range of fries,<br> nuggets, soft drinks, and many more<e/p>
+                    <p class="h5 text-light d-block d-md-none">The Best Fast <br> Food Sides</p>
+                    
                 </div>
                 <img src="{% static 'images/sides.jpg.png' %}" class="d-block w-100" alt="...">
               </div>
@@ -251,7 +259,7 @@
     
     <!-- Footer -->
   <footer class="page-footer">
-  <div class="footer-copyright text-center text-light py-3">© 2020 Copyright:<a href="https://mdbootstrap.com/"> MDBootstrap.com</a></div>
+  <div class="footer-copyright text-center text-light py-3">© 2021 Copyright: &nbsp;<a href="{% url 'home' %}">FastFood Online™</a></div>
   </footer>
 
 
