@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'fastfood.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd28tauiq9rk3c3',
+        'HOST': 'ec2-3-230-61-252.compute-1.amazonaws.com',
+        'PORT': 5432,
+        'USER': 'hvszfadwwguykj',
+        'PASSWORD': '0bd6472a8841e29c786bd2bdf781a0e8e32a61b6994767d14356792a1ffcf07a', 
     }
 }
 

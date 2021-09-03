@@ -180,14 +180,7 @@
       $(document).on('click', '.remove', function(event){
         event.preventDefault();
         var id = $(this).val();
-        $.ajax({
-          type:'GET',
-          url:'',
-          data:{
-            ProductID:$(this).val(),
-          },
-          success:function(){
-            var priceDelta = document.getElementById(id).getAttribute('data-price');
+        var priceDelta = document.getElementById(id).getAttribute('data-price');
             priceDelta = parseInt(priceDelta);
             var currentTotal = document.getElementById("CartTotal");
             currentTotal = parseInt(currentTotal.innerHTML);
@@ -203,8 +196,16 @@
             cart = document.getElementById('itemcount');
             value = parseInt(cart.innerHTML);
             cart.innerHTML = value - 1;
+        $.ajax({
+          type:'GET',
+          url:'',
+          data:{
+            ProductID:$(this).val(),
+          },
+
             
-          }
+            
+          
         });
       });
   

@@ -159,7 +159,11 @@ def CartView(request):
             if request.GET.get('ProductID') is not None:
                 ProductID = request.GET.get('ProductID')
                 product = Products.objects.get(ProductID = int(ProductID))
-                instance = Cart.objects.get(CustomerID=currentCustomer, ProductID = product)
+                instance = Cart.objects.filter(CustomerID=currentCustomer, ProductID = product)
+                if len(instance) > 0:
+                    instance = instance[0]
+                else:
+                    instance = Cart.objects.get(CustomerID=currentCustomer, ProductID = product)
                 instance.delete()
         return render(request, 'baseapp/cart.html', context)
     

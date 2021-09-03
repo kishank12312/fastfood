@@ -324,15 +324,7 @@
       $(document).on('click', '.cartadd', function(event){
         event.preventDefault();
         var id = $(this).val();
-        $.ajax({
-          type:'GET',
-          url:'',
-          data:{
-            ProductID:$(this).val(),
-          },
-          success:function(){
-            //alert("Item Added To Cart");
-            var a = document.createElement('a'); 
+        var a = document.createElement('a'); 
             a.text = 'Go To Cart'
             a.href = "{% url 'cart' %}"; 
             a.className = "btn btn-outline-warning";
@@ -351,8 +343,15 @@
             elem.fadeIn(400);
             elem.delay(1000);
             elem.fadeOut(400);
+        $.ajax({
+          type:'GET',
+          url:'',
+          data:{
+            ProductID:$(this).val(),
+          },
+
             
-          }
+            
         });
       });
   
