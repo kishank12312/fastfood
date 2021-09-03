@@ -252,7 +252,7 @@ def orderhistory(request):
             for IndividualOrder in OrderSet:
                 TempCost += IndividualOrder.ItemPrice
             OrderCosts.append(TempCost)
-        context['SeparateOrders'] = SeparateOrders 
+        context['SeparateOrders'] = SeparateOrders[::-1] 
         context['OrderCosts'] = OrderCosts
         if request.method == "GET":
             if request.GET.get('OrderView') is not None:
