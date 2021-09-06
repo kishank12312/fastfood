@@ -6,6 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.contrib import messages
 from .models import *
+from . import Functions
 # Create your views here.
 
 
@@ -229,6 +230,7 @@ def orderhistory(request):
             cartitems.append(obj.ProductID)
         context = {'cartitems':cartitems}
         AllOrderedObjects = Orders.objects.filter(CustomerID= currentCustomer).order_by('OrderNumber')
+        #print(AllOrderedObjects)
         if len(AllOrderedObjects) == 0:
             context['SeparateOrders'] = [] 
             context['OrderCosts'] = []
@@ -244,15 +246,13 @@ def orderhistory(request):
                 o = []
                 o.append(Object)
                 TempOrderNum = Object.OrderNumber
+        if len(o) > 0:
+            SeparateOrders.append(o)
         if SeparateOrders == []:
             SeparateOrders.append(o)
-        OrderCosts = []
-        for OrderSet in SeparateOrders:
-            TempCost = 0
-            for IndividualOrder in OrderSet:
-                TempCost += IndividualOrder.ItemPrice
-            OrderCosts.append(TempCost)
-        context['SeparateOrders'] = SeparateOrders[::-1] 
+        SeparateOrders.sort(reverse=True, key= lambda x: x[0].DateOrdered)
+        OrderCosts = Functions.PriceList(SeparateOrders)
+        context['SeparateOrders'] = SeparateOrders
         context['OrderCosts'] = OrderCosts
         if request.method == "GET":
             if request.GET.get('OrderView') is not None:
@@ -287,7 +287,7 @@ def ProfileView(request):
         if len(AllOrderedObjects) == 0:
             context['SeparateOrders'] = [] 
             context['OrderCosts'] = []
-            return render(request, 'baseapp/orders.html', context)
+            return render(request, 'baseapp/profile.html', context)
         SeparateOrders = []
         TempOrderNum = AllOrderedObjects[0].OrderNumber
         o = []

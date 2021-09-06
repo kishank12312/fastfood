@@ -32,7 +32,7 @@ class Orders(models.Model):
     OrderNumber = models.CharField(null=True, max_length=400)
     CustomerID = models.ForeignKey(Customer,on_delete=models.SET_NULL, null=True)
     ProductID = models.ForeignKey(Products,on_delete=models.SET_NULL, null=True)
-    DateOrdered = models.DateField(auto_now_add=True)
+    DateOrdered = models.DateTimeField(auto_now_add=True)
     OrderStatus = models.CharField(max_length=100, null=True, blank=True)
     Address = models.TextField(null=True, blank=True)
     ItemPrice = models.IntegerField(null=True)

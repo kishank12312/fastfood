@@ -125,7 +125,7 @@
         <br>
         <div class="row lead text-light">
             <div class="col" style="padding-left: 6%;">
-                <strong>Order Placed On:</strong>&nbsp; {{ Order.0.DateOrdered  }}
+                <strong>Order Placed On:</strong>&nbsp; {{ Order.0.DateOrdered|date:'d M Y'  }}
             </div>
         </div>
         <br>
