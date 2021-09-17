@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load ExtraTags %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -104,24 +104,26 @@
         <p class="display-5 text-light">Order Summary</p> 
         <p class="lead text-light" style="display: inline;">Review your order one last time before confirming it. If anything looks wrong, </p><a class="lead" href="{% url 'cart' %}">go back to cart.</a> <br><br>
         <div class="row justify-content-center">
-            <div class="col-12 col-sm-8 col-md-5">
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6">
                 <table class="table text-light">
                     <thead>
                         <tr>
                             <th scope="col" class="text-warning fs-5">Item Name</th>
-                            <th scope="col" class="text-warning fs-5">Price</th>
+                            <th scope="col" class="text-warning fs-5 text-center">Quantity</th>
+                            <th scope="col" class="text-warning fs-5 text-center">Price</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for object in objects %}
+                        {% for object in itemswithqty %}
                         <tr>
                             <td class="lead fs-5">
-                                {{ object.ProductName }} &nbsp;
-                                {% if object.Vegetarian %}
+                                {{ object.0.ProductName }} &nbsp;
+                                {% if object.0.Vegetarian %}
                                 <p class="VegOrNot" style="border:solid 1px rgb(0, 255, 0); color: rgb(0, 255, 0); display: inline;">VEG</p>
                                 {% else %}<p class="VegOrNot" style="border:solid 1px red; color: red; display: inline;">NON-VEG</p>{% endif %}
                             </td>
-                            <td class="lead fs-5">₹{{ object.Price }}</td>
+                            <td class="lead fs-5 text-center">{{ object.1 }}</td>
+                            <td class="lead fs-5 text-center">₹{{ object.0.Price|multiply:object.1 }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

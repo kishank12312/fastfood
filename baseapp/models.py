@@ -25,7 +25,7 @@ class Cart(models.Model):
     Cart_ID = models.AutoField(primary_key=True)
     CustomerID = models.ForeignKey(Customer,on_delete=models.SET_NULL, null=True)
     ProductID = models.ForeignKey(Products,on_delete=models.SET_NULL, null=True)
-    
+    Quantity = models.IntegerField(default=1)
 
 class Orders(models.Model):
     OrderID = models.AutoField(primary_key=True)
@@ -36,3 +36,4 @@ class Orders(models.Model):
     OrderStatus = models.CharField(max_length=100, null=True, blank=True)
     Address = models.TextField(null=True, blank=True)
     ItemPrice = models.IntegerField(null=True)
+    Qty = models.IntegerField(default=1)

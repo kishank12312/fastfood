@@ -166,7 +166,8 @@
                         <th scope="col">Product Name</th>
                         <th scope="col">Category</th>
                         <th scope="col">Description</th>
-                        <th scope="col">Price</th>
+                        <th class="text-center" scope="col">Quantity</th>
+                        <th class="text-center" scope="col">Price</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -176,11 +177,13 @@
                         <td>{{ item.ProductID.ProductName }}</td>
                         <td>{{ item.ProductID.Category }}</td>
                         <td>{{ item.ProductID.Description }}</td>
-                        <td>₹{{ item.ProductID.Price }}</td>
+                        <td class="text-center">{{ item.Qty }}</td>
+                        <td class="text-center">₹{{ item.ItemPrice|multiply:item.Qty }}</td>
                       </tr>
                       {% endfor %}
                       <tr>
                         <th scope="row"></th>
+                        <td></td>
                         <td></td>
                         <td></td>
                         <td class="d-flex justify-content-end fs-4"><strong>Total:</strong></td>

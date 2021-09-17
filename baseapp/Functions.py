@@ -3,7 +3,7 @@ def PriceList(SeparateOrders):
     for order in SeparateOrders:
         currentPrice = 0
         for obj in order:
-            currentPrice += obj.ItemPrice
+            currentPrice += obj.ItemPrice * obj.Qty
         result.append(currentPrice)
     
     return result

@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.contrib import messages
 from .models import *
 from . import Functions
+from django.db.models import F
 # Create your views here.
 
 
@@ -134,11 +135,34 @@ def Menu(request):
         for obj in queryset:
             cartitems.append(obj.ProductID)
         context['AllCartItems'] = cartitems
+        context['Cartobjects'] = queryset
     else:
         context['AllCartItems'] = None
     if request.method == 'GET':
         ProductID = request.GET.get('ProductID')
-        if ProductID is not None:
+        Update = request.GET.get("Update")
+        print(Update)
+        if Update is not None:
+            if Update == "add":
+                currentCustomer = Customer.objects.get(user=request.user)
+                addedproduct = Products.objects.get(ProductID = int(ProductID))
+                Cart.objects.filter(CustomerID=currentCustomer, ProductID = addedproduct).update(Quantity=F('Quantity') + 1)
+                print("adone")
+            elif Update == "subtract":
+                currentCustomer = Customer.objects.get(user=request.user)
+                addedproduct = Products.objects.get(ProductID = int(ProductID))
+                Cart.objects.filter(CustomerID=currentCustomer, ProductID = addedproduct).update(Quantity=F('Quantity') - 1)
+                print("done")
+            elif Update == "remove":
+                currentCustomer = Customer.objects.get(user=request.user)
+                addedproduct = Products.objects.get(ProductID = int(ProductID))
+                instance = Cart.objects.filter(CustomerID=currentCustomer, ProductID = addedproduct)
+                if len(instance) > 0:
+                    instance = instance[0]
+                else:
+                    instance = Cart.objects.get(CustomerID=currentCustomer, ProductID = addedproduct)
+                instance.delete()
+        elif ProductID is not None:
             currentCustomer = Customer.objects.get(user=request.user)
             addedproduct = Products.objects.get(ProductID = int(ProductID))
             cartitem = Cart(CustomerID= currentCustomer, ProductID= addedproduct)
@@ -156,16 +180,35 @@ def CartView(request):
         for obj in queryset:
             cartitems.append(obj.ProductID)
         context = {'cartitems':cartitems}
-        if request.method == "GET":
-            if request.GET.get('ProductID') is not None:
-                ProductID = request.GET.get('ProductID')
-                product = Products.objects.get(ProductID = int(ProductID))
-                instance = Cart.objects.filter(CustomerID=currentCustomer, ProductID = product)
-                if len(instance) > 0:
-                    instance = instance[0]
-                else:
-                    instance = Cart.objects.get(CustomerID=currentCustomer, ProductID = product)
-                instance.delete()
+        context['Cartqueryset'] = queryset
+        if request.method == 'GET':
+            ProductID = request.GET.get('ProductID')
+            Update = request.GET.get("Update")
+            if Update is not None:
+                if Update == "add":
+                    currentCustomer = Customer.objects.get(user=request.user)
+                    addedproduct = Products.objects.get(ProductID = int(ProductID))
+                    Cart.objects.filter(CustomerID=currentCustomer, ProductID = addedproduct).update(Quantity=F('Quantity') + 1)
+                    print("adone")
+                elif Update == "subtract":
+                    currentCustomer = Customer.objects.get(user=request.user)
+                    addedproduct = Products.objects.get(ProductID = int(ProductID))
+                    Cart.objects.filter(CustomerID=currentCustomer, ProductID = addedproduct).update(Quantity=F('Quantity') - 1)
+                    print("done")
+                elif Update == "remove":
+                    currentCustomer = Customer.objects.get(user=request.user)
+                    addedproduct = Products.objects.get(ProductID = int(ProductID))
+                    instance = Cart.objects.filter(CustomerID=currentCustomer, ProductID = addedproduct)
+                    if len(instance) > 0:
+                        instance = instance[0]
+                    else:
+                        instance = Cart.objects.get(CustomerID=currentCustomer, ProductID = addedproduct)
+                    instance.delete()
+            elif ProductID is not None:
+                currentCustomer = Customer.objects.get(user=request.user)
+                addedproduct = Products.objects.get(ProductID = int(ProductID))
+                cartitem = Cart(CustomerID= currentCustomer, ProductID= addedproduct)
+                cartitem.save(force_insert=True)
         return render(request, 'baseapp/cart.html', context)
     
     return redirect(reverse('login'))
@@ -174,31 +217,33 @@ def summary(request):
     if request.user.is_authenticated:
         currentCustomer = Customer.objects.get(user=request.user)
         queryset = Cart.objects.filter(CustomerID=currentCustomer)
-        cartitems = []
+        cartitems,itemswithqty = [],[]
         for obj in queryset:
             cartitems.append(obj.ProductID)
+            itemswithqty.append((obj.ProductID, obj.Quantity))
         context = {'objects':cartitems}
+        context["itemswithqty"] = itemswithqty
         totalcost = 0
-        for product in cartitems:
-            totalcost += product.Price
+        for productpair in itemswithqty:
+            totalcost += productpair[0].Price * productpair[1]
         context['totalcost'] = totalcost
         context['cust'] = currentCustomer
-
 
         if request.method == 'POST':
             uid = request.POST.get('csrfmiddlewaretoken')
             address = request.POST.get('Address')
-            for product in cartitems:
+            for product in itemswithqty:
                 newOrder = Orders(
                     OrderNumber = uid,
                     CustomerID = currentCustomer,
-                    ProductID = product,
+                    ProductID = product[0],
                     Address = address,
                     OrderStatus = 'Order Success',
-                    ItemPrice = product.Price,
+                    ItemPrice = product[0].Price,
+                    Qty = product[1],
                 )
                 newOrder.save(force_insert=True)
-                instance = Cart.objects.get(CustomerID=currentCustomer, ProductID = product)
+                instance = Cart.objects.get(CustomerID=currentCustomer, ProductID = product[0])
                 instance.delete()
             return redirect(reverse('ordersuccess'))
 
@@ -266,6 +311,7 @@ def orderhistory(request):
                     index+=1
                 context = {}
                 context['Order'] = requiredOrder
+                print(requiredOrder)
                 context['total'] = total
                 return render(request, 'baseapp/orderview.html', context)
 
