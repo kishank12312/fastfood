@@ -4,7 +4,7 @@ from .models import *
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django import forms
 from django.contrib.auth.models import User
-
+from allauth.account.forms import SignupForm
 
 class DateInput(forms.DateInput):
     input_type = 'date'
@@ -40,3 +40,19 @@ class CustomerForm(ModelForm):
         widgets = {
             'DateOfBirth': DateInput(),
         }
+
+
+class CustomSignupForm(SignupForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomSignupForm, self).__init__(*args, **kwargs)
+        self.fields['username'].help_text = 'Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.'
+        self.fields['password1'].help_text = 'Your password can’t be too similar to your other personal information. Your password must contain at least 8 characters. Your password can’t be a commonly used password. Your password can’t be entirely numeric.'
+        self.fields['password2'].help_text = 'Enter the same password as before, for verification.'
+
+        self.fields['email'] = forms.EmailField(label='Email')
+        self.fields['email'].help_text = 'Required. This email will be verified.'
+
+        self.fields['username'].widget = forms.TextInput(attrs={'type': 'text', 'class': 'form-control text-light', 'placeholder':'Placeholder'})
+        self.fields['email'].widget = forms.EmailInput(attrs={'type': 'email', 'class': 'form-control text-light', 'placeholder':'Placeholder'})
+        self.fields['password1'].widget = forms.PasswordInput(attrs={'class': 'form-control text-light', 'placeholder':'Placeholder'})
+        self.fields['password2'].widget = forms.PasswordInput(attrs={'class': 'form-control text-light', 'placeholder':'Placeholder'})

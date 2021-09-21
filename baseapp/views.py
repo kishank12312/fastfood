@@ -30,6 +30,7 @@ def RegisterView(request):
     context = {'form': form}
     return render(request, 'baseapp/register.html', context)
 
+'''
 def LoginView(request):
     context = {}
     if request.user.is_authenticated:
@@ -47,6 +48,7 @@ def LoginView(request):
             messages.info(request, 'Username or Password is incorrect.')
 
     return render(request, 'baseapp/login.html', context)
+'''
 
 def LogoutView(request):
     logout(request)
@@ -76,6 +78,9 @@ def empty(request):
 def home(request):
     context = {}
     if request.user.is_authenticated:
+        x = Customer.objects.filter(user=request.user)
+        if len(x) != 1:
+            return redirect(reverse('setup'))
         currentCustomer = Customer.objects.get(user=request.user)
         context['u'] = currentCustomer
         queryset = Cart.objects.filter(CustomerID=currentCustomer)
@@ -132,6 +137,9 @@ def Menu(request):
         sidegrouped.append(sideset)
     context = {'burgergrouped':burgergrouped, 'pizzagrouped':pizzagrouped, 'wrapgrouped': wrapgrouped, 'sidegrouped':sidegrouped}
     if request.user.is_authenticated:
+        x = Customer.objects.filter(user=request.user)
+        if len(x) != 1:
+            return redirect(reverse('setup'))
         currentCustomer = Customer.objects.get(user=request.user)
         queryset = Cart.objects.filter(CustomerID=currentCustomer)
         cartitems = []
@@ -177,6 +185,9 @@ def Menu(request):
 
 def CartView(request):
     if request.user.is_authenticated:
+        x = Customer.objects.filter(user=request.user)
+        if len(x) != 1:
+            return redirect(reverse('setup'))
         currentCustomer = Customer.objects.get(user=request.user)
         queryset = Cart.objects.filter(CustomerID=currentCustomer)
         cartitems = []
@@ -218,6 +229,9 @@ def CartView(request):
 
 def summary(request):
     if request.user.is_authenticated:
+        x = Customer.objects.filter(user=request.user)
+        if len(x) != 1:
+            return redirect(reverse('setup'))
         currentCustomer = Customer.objects.get(user=request.user)
         queryset = Cart.objects.filter(CustomerID=currentCustomer)
         cartitems,itemswithqty = [],[]
@@ -256,6 +270,7 @@ def summary(request):
 
 def success(request):
     if request.user.is_authenticated:
+        
         context = {}
         currentCustomer = Customer.objects.get(user=request.user)
         context['u'] = currentCustomer
@@ -271,6 +286,9 @@ def success(request):
 
 def orderhistory(request):
     if request.user.is_authenticated:
+        x = Customer.objects.filter(user=request.user)
+        if len(x) != 1:
+            return redirect(reverse('setup'))
         currentCustomer = Customer.objects.get(user=request.user)
         queryset = Cart.objects.filter(CustomerID=currentCustomer)
         cartitems = []
@@ -324,6 +342,9 @@ def orderhistory(request):
 
 def ProfileView(request):
     if request.user.is_authenticated:
+        x = Customer.objects.filter(user=request.user)
+        if len(x) != 1:
+            return redirect(reverse('setup'))
         context = {}
         currentCustomer = Customer.objects.get(user=request.user)
         queryset = Cart.objects.filter(CustomerID=currentCustomer)
@@ -427,12 +448,5 @@ def AddressChange(request):
         return redirect(reverse('login'))
 
 def mail(request):
-    send_mail(
-        'Test Mail',
-        'Message',
-        'noreply@mail.com',
-        ['kishankcr7@gmail.com'],
-        fail_silently=False,
-    )
-
-    return HttpResponse("Sent")
+    x = Customer.objects.filter(user=request.user)
+    return HttpResponse(len(x))

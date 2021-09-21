@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+from allauth.account.views import LoginView, SignupView 
 
 urlpatterns = [
     path('', views.empty),
@@ -9,9 +10,9 @@ urlpatterns = [
     path('orders/', views.orderhistory, name='orders'),
     path('ordersummary/', views.summary, name='ordersummary'),
     path('ordersuccess/', views.success, name='ordersuccess'),
-    path('login/', views.LoginView, name='login'),
+    path('login/', LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView, name='logout'),
-    path('register/', views.RegisterView, name='register'),
+    path('register/', SignupView.as_view(), name='register'),
     path('profile/', views.ProfileView, name='profile'),
     path('namechange/', views.NameChange, name='namechange'),
     path('addresschange/', views.AddressChange, name='addresschange'),
