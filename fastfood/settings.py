@@ -179,3 +179,5 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+SOCIALACCOUNT_ADAPTER = 'baseapp.Functions.CustomSocialAccountAdapter'
