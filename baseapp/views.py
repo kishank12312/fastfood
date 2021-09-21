@@ -5,8 +5,11 @@ from .forms import CreateUserForm, CustomerForm
 from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.contrib import messages
+from django.core.mail import send_mail
+
 from .models import *
 from . import Functions
+
 from django.db.models import F
 # Create your views here.
 
@@ -422,3 +425,14 @@ def AddressChange(request):
 
     else:
         return redirect(reverse('login'))
+
+def mail(request):
+    send_mail(
+        'Test Mail',
+        'Message',
+        'noreply@mail.com',
+        ['kishankcr7@gmail.com'],
+        fail_silently=False,
+    )
+
+    return HttpResponse("Sent")

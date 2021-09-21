@@ -18,4 +18,5 @@ urlpatterns = [
     path('addressremove/', views.AddressRemove, name='addressremove'),
     path('addressadd/', views.AddressAdd, name='addressadd'),
     path('accountsetup/', views.SetUp, name='setup'),
+    path('mailtest/', views.mail),
 ]
