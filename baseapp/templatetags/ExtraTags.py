@@ -19,3 +19,11 @@ def productqty(value, arg):
         if i.ProductID == arg:
             return i.Quantity
     return "F"
+
+
+@register.filter
+def checkmailsent(value):
+    if 'Confirmation e-mail sent to' in str(value):
+        return True
+    else:
+        return False

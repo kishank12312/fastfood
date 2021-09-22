@@ -158,8 +158,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'kishankoundinya11@gmail.com'
-EMAIL_HOST_PASSWORD = 'testpassword1!M'
+EMAIL_HOST_USER = 'fastfoodonline253@gmail.com'
+EMAIL_HOST_PASSWORD = '936a185caaa266bb9cbe981e9e05cb78cd732b0b3280eb944412bb6f8f8f07af'
 
 SITE_ID = 2
 LOGIN_REDIRECT_URL = '/'
@@ -167,6 +167,9 @@ LOGIN_REDIRECT_URL = '/'
 ACCOUNT_FORMS = {
 'signup': 'baseapp.forms.CustomSignupForm',
 }
+
+ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = '/home'
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
@@ -181,3 +184,8 @@ SOCIALACCOUNT_PROVIDERS = {
 }
 
 SOCIALACCOUNT_ADAPTER = 'baseapp.Functions.CustomSocialAccountAdapter'
+
+ACCOUNT_EMAIL_REQUIRED = True
+
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'

@@ -64,6 +64,12 @@
         body{  
           background-color: #1d1d1d !important;
         }
+        .alert{
+          z-index: 100;
+          top: 60;
+          position: fixed;
+          
+        }
     </style>
 </head>
 <body>
@@ -107,11 +113,24 @@
     </nav>
     <!-- END OF NAVBAR -->
 
+    
+    {% for message in messages %}
+    <div class="d-flex justify-content-center">
+      <div id='popupmessage' class="alert" style="background-color: rgb(0, 255, 0); width: fit-content; color: #000 !important; display: none !important;" role="alert">
+        <div class="d-flex align-items-center">
+          &nbsp; {{ message }}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    
+    
     <br class="d-block d-xl-none">
     <br class="d-block d-xl-none">
     <br class="d-block d-xl-none">
     <br>
     <br>
+
 
     <!-- CAROUSEL -->
     <section>
@@ -274,6 +293,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+    <script>
+      elem = $('#popupmessage');
+              elem.fadeIn(400);
+              elem.delay(2200);
+              elem.fadeOut(400);
+    </script>
+    
+    
     <script>
       const observer = new MutationObserver(function(mutations){
         mutations.forEach(function(mutation){
