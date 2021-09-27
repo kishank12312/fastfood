@@ -1,0 +1,490 @@
+{% load static %}
+{% load ExtraTags %}
+
+
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="shortcut icon" href="{%  static 'images/favico.png' %}">
+    <title>Admin Dashboard</title>
+    <style>
+        footer {
+          background-color: black;
+          bottom: 0;
+        }  
+        nav {
+          position: fixed;
+          background-color: rgba(0, 0, 0, 0.8);
+        }
+        .nav-link{
+          color: #f0f0f0 !important;
+        }
+        body{  
+          background-color: #1d1d1d !important;
+        }
+        
+        .VegOrNot{
+          margin-top: 0.5rem; 
+          margin-bottom: 0.5rem; 
+          position: inherit; 
+          border-radius:10%; 
+          width: fit-content; 
+          font-size: x-small; 
+          padding: 1%;
+        }
+        #page-container {
+        position: relative;
+        min-height: 100vh;
+        }
+        #content-wrap {
+          padding-bottom: 3rem;    /* Footer height */
+        }
+
+        #footer {
+          position: relative;
+          bottom: 0;
+          width: 100%;
+          height: 3.5rem;            /* Footer height */
+        }
+        .cartcounter {
+            border: solid 1px rgb(0, 247, 255);
+            border-radius: 50%;
+            width: fit-content;
+            height: fit-content;
+            color: rgb(0, 247, 255);
+            line-height: 1em;
+            padding-top: 1.5px;
+            padding-bottom: 3px;
+        }
+        .form-control{
+            background-color: #303030;
+            
+        }
+        .form-control:focus{
+            background-color: #303030;
+            
+        }
+        label {
+            color: white;
+        }
+        textarea {
+          caret-color: white;
+          color: white;
+        }
+        input{
+          caret-color: white;
+        }
+        .infocard{
+          background-color: #2c3034 !important;
+          border: solid 1px white;
+        }
+
+    </style>
+</head>
+<body>
+<div id="page-container">
+<div id="content-wrap">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+          <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'images/Logo.png' %}" alt="" height="35em">
+          </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
+            <div class="navbar-nav">
+              <!--<a class="nav-link active" aria-current="page" href="#">Home</a>-->
+              <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'home' %}">HOME</a>
+              <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'cart' %}"> 
+                <span class="cartcounter d-flex justify-content-center align-items-center px-1">{{ cartitems|length }}</span> &nbsp;Cart
+              </a>
+              <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'menu' %}">ORDER NOW</a>
+              <a class="nav-link dropdown-toggle d-flex justify-content-center align-items-center" href="#" id="profileDrop" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i id="profileIcon" style="font-size: 1.6em;" class="bi-person-circle"></i>
+              </a>
+              <ul style="margin-right: 4.9%; margin-left: 4.9%;" class="dropdown-menu dropdown-menu-end dropdown-menu-dark" aria-labelledby="navbarDarkDropdownMenuLink">
+                <center><i id="profileIcon" class="bi-person-circle" style="font-size: 5em;"></i></center>
+                <center><p class="lead fs-6">Logged in as: {{request.user.username}}</p></center>
+                <li><a class="dropdown-item d-flex justify-content-center" href="{% url 'profile' %}">View Profile</a></li>
+                <li><a class="dropdown-item d-flex justify-content-center" href="{% url 'orders' %}">View Orders</a></li>
+                <li><a class=" btn btn-outline-danger dropdown-item d-flex justify-content-center" href="{% url 'logout' %}">LOGOUT</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+    </nav>
+    <!-- END OF NAVBAR -->
+
+    <br><br><br>
+    <div class="container">
+        <div class="row gy-3">
+            <div class="col-12 col-lg-9 col-xxl-6">
+                <div class="card bg-dark text-light text-center" style="border: solid 1px rgb(238, 255, 0);">
+                    <div class="card-header">REGISTERED CUSTOMERS</div>
+                    <div class="card-body ">
+
+                        <!-- IF GREATER THAN SMALL SCREENS-->
+                        <ul class="nav nav-pills mb-3 d-none d-lg-flex" id="pills-tab" role="tablist">
+                          {% for customerset in allcustomers %}
+                          <li class="nav-item" role="presentation">
+                            <button class="nav-link {% if forloop.first %}active{% endif %}" id="pills{{ forloop.counter }}-tab" data-bs-toggle="pill" data-bs-target="#pills{{ forloop.counter }}" type="button" role="tab" aria-controls="pills{{ forloop.counter }}" aria-selected={% if forloop.first %}"true"{% else %}"false"{% endif %}>Page {{ forloop.counter }}</button>
+                          </li>
+                          {% endfor %}
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                        {% for customerset in allcustomers %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="pills{{ forloop.counter }}" role="tabpanel" aria-labelledby="pills{{ forloop.counter }}-tab">
+                        <table class="table table-dark table-striped d-none d-lg-table">
+                            <thead>
+                              <tr>
+                                <th scope="col">Customer ID</th>
+                                <th scope="col">Customer Name</th>
+                                <th scope="col">Account Username</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Date Of Birth</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for customer in customerset %}
+                              <tr>
+                                <td>{{ customer.id }}</td>
+                                <td>{{ customer.CustomerName }}</td>
+                                <td>{{ customer.user.username }}</td>
+                                <td>{{ customer.user.email }}</td>
+                                <td>{{ customer.DateOfBirth }}</td>
+                              </tr>
+                              {% endfor %}
+                            </tbody>
+                          </table>
+                          </div>
+                          {% endfor %}
+                          
+                          </div>
+                          <!-- IF LESSER THAN SMALL SCREENS-->
+                          <ul class="nav nav-pills mb-3 d-lg-none" id="cards-tab" role="tablist">
+                            {% for customerset in allcustomers %}
+                            <li class="nav-item" role="presentation">
+                              <button class="nav-link {% if forloop.first %}active{% endif %}" id="cards{{ forloop.counter }}-tab" data-bs-toggle="pill" data-bs-target="#cards{{ forloop.counter }}" type="button" role="tab" aria-controls="cards{{ forloop.counter }}" aria-selected={% if forloop.first %}"true"{% else %}"false"{% endif %}>Page {{ forloop.counter }}</button>
+                            </li>
+                            {% endfor %}
+                          </ul>
+                          <div class="tab-content" id="cards-tabContent">
+                          {% for customerset in allcustomers %}
+                          <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="cards{{ forloop.counter }}" role="tabpanel" aria-labelledby="cards{{ forloop.counter }}-tab">
+                            {% for customer in customerset %}
+                            <div class="card d-lg-none infocard">
+                            <div class="card-body ">
+                              <div class="row"><div class="col-5 text-end"><p class="text-light my-0">Customer ID: </p></div><div class="col-5 text-start"><p class="text-light my-0">{{ customer.id }}</p></div></div>
+                              <div class="row"><div class="col-5 text-end"><p class="text-light my-0">Customer Name: </p></div><div class="col-5 text-start"><p class="text-light my-0">{{ customer.CustomerName }}</p></div></div>
+                              <div class="row"><div class="col-5 text-end"><p class="text-light my-0">Account Username: </p></div><div class="col-5 text-start"><p class="text-light my-0">{{ customer.user.username }}</p></div></div>
+                              <div class="row"><div class="col-5 text-end"><p class="text-light my-0">Email: </p></div><div class="col-5 text-start"><p class="text-light my-0">{{ customer.user.email }}</p></div></div>
+                              <div class="row"><div class="col-5 text-end"><p class="text-light my-0">Date of Birth: </p></div><div class="col-5 text-start"><p class="text-light my-0">{{ customer.DateOfBirth }}</p></div></div>
+                            </div>
+                          </div>
+                          <br class="d-lg-none">
+                          {% endfor %}
+                          </div>
+                          {% endfor %}
+                          </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="col-12 col-lg-3 col-xxl-6">
+                <div class="row gy-3">
+                    <div class="col">
+                        <div class="card bg-info text-center">
+                            <div class="card-body">
+                                <h3 class="card-title">TOTAL ORDERS PLACED</h3>
+                                <hr>
+                                <h1 class="increase" data-target="{{ totalorders }}" data-speed="50">0</h1>
+                            </div>
+                        </div>
+                    </div>        
+                    <div class="col">
+                        <div class="card bg-success text-center">
+                            <div class="card-body">
+                                <h3 class="card-title">TOTAL SALES REVENUE</h3>
+                                <hr>
+                                <span class="card-text fs-1">₹</span><span class="card-text increase fs-1" data-speed="150" data-target="{{ revenue }}">0</span>
+                            </div>
+                        </div>
+                    </div>      
+                </div>  
+                <br>
+                <div class="row gy-3">
+                    <div class="col">
+                        <div class="card bg-warning text-center">
+                            <div class="card-body">
+                                <h3 class="card-title">MOST SOLD PRODUCT</h3>
+                                <hr>
+                                <h5>{{ maxproduct.0 }}</h5>
+                                <span class="card-text increase" data-speed="20" data-target="{{ maxproduct.1 }}">0</span> &nbsp;<span class="card-text">Units Sold</span>
+                            </div>
+                        </div>
+                    </div>        
+                    <div class="col">
+                        <div class="card bg-danger text-center text-light">
+                            <div class="card-body">
+                                <h3 class="card-title">HIGHEST PAYING CUSTOMER</h3>
+                                <hr>
+                                <h5>{{ maxcust.0 }}</h5>
+                                <span class="card-text">₹</span><span class="card-text increase" data-speed="250" data-target="{{ maxcust.1 }}">0</span> &nbsp;<span class="card-text">Paid So Far</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <br><br>
+                <div class="row gy-3 d-none d-xxl-flex">
+                  <div class="col-12 text-center"><canvas id="categorypie"></canvas><h4 class="text-light">TOTAL UNITS SOLD PER CATEGORY</h4></div>
+                </div>  
+                <br>
+                <div class="row gy-3 d-none d-xxl-flex">
+                  <div class="col-12 text-center"><canvas id="salesgraph"></canvas><h4 class="text-light">WEEKLY REVENUE IN RUPEES</h4></div>
+                </div>  
+
+            </div>  
+ 
+    </div>
+    <br><br>
+    <div class="row gy-3 d-xxl-none">
+      <div class="col-12 col-lg-6 text-center"><canvas id="categorypie2"></canvas><h4 class="text-light">TOTAL UNITS SOLD PER CATEGORY</h4></div>
+      <div class="col-12 col-lg-6 text-center"><canvas id="salesgraph2"></canvas><h4 class="text-light">WEEKLY REVENUE IN RUPEES</h4></div>
+    </div> 
+    <br><br>
+    <span><h3 style="display: inline-block;" class="text-light">VIEW ALL RECEIVED ORDERS: &nbsp;&nbsp;</h3><a href="{% url 'admindashboardorders' %}" class="btn btn-outline-info">VIEW ALL ORDERS</a></span> 
+    <p class="d-none" id="info">{{ salesdist }}</p>
+  
+</div>    
+<br><br><br>
+</div>    
+    <!-- Footer -->
+  <footer id="footer" class="page-footer">
+    <div class="footer-copyright text-center text-light py-3">© 2021 Copyright: &nbsp;<a href="{% url 'home' %}">FastFood Online™</a></div>  </footer>
+</div>
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+  <script>
+    var info = document.getElementById('info');
+    var pieinfo = info.innerHTML.split(",");
+    pieinfo = pieinfo.splice(0,4);
+    for (let index = 0; index < pieinfo.length; index++) {
+      pieinfo[index] = parseInt(pieinfo[index]);
+    }
+  </script>
+  <script>
+    var ctx = document.getElementById('categorypie').getContext('2d');
+    const data = {
+                labels: [
+                  'WRAPS',
+                  'PIZZAS',
+                  'SIDES',
+                  'BURGERS',
+                ],
+                datasets: [{
+                  label: 'My First Dataset',
+                  data: pieinfo,
+                  backgroundColor: [
+                    '#dc3545',
+                    '#0dcaf0',
+                    '#ffc107',
+                    '#198754',
+                  ],
+                  color: [
+                    '#ffffff',
+                    '#ffffff',
+                    '#ffffff',
+                    '#ffffff',
+                  ],
+                  hoverOffset: 4
+                }]
+              };
+    var myChart = new Chart(ctx, {
+      type: 'pie',
+      data: data,
+      options: { 
+            legend: {
+                labels: {
+                    fontColor: "white",
+                }
+            },
+      }
+        
+    });
+    </script>
+  <script>
+    var ctx2 = document.getElementById('categorypie2').getContext('2d');
+    const data2 = {
+                labels: [
+                  'WRAPS',
+                  'PIZZAS',
+                  'SIDES',
+                  'BURGERS',
+                ],
+                datasets: [{
+                  label: 'My First Dataset',
+                  data: pieinfo,
+                  backgroundColor: [
+                    '#dc3545',
+                    '#0dcaf0',
+                    '#ffc107',
+                    '#198754',
+                  ],
+                  color: [
+                    '#ffffff',
+                    '#ffffff',
+                    '#ffffff',
+                    '#ffffff',
+                  ],
+                  hoverOffset: 4
+                }]
+              };
+    var myChart2 = new Chart(ctx2, {
+      type: 'pie',
+      data: data2,
+      options: { 
+            legend: {
+                labels: {
+                    fontColor: "white",
+                }
+            },
+      }
+        
+    });
+    </script>
+  <script>
+    function repeat(arr, n){
+  var a = [];
+  for (var i=0;i<n;[i++].push.apply(a,arr));
+  return a;
+}
+    var ctx4 = document.getElementById('salesgraph').getContext('2d');
+    const labels2 = {{ weeklabels|safe }};
+    const data4 = {
+      labels: labels2,
+      datasets: [{
+        label: 'Weekly Revenue in Rupees',
+        data: {{ weekvalues|safe }},
+        fill: false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1,
+      }]
+    };
+    var myChart4 = new Chart(ctx4, {
+      type: 'line',
+      data: data4,
+      options: {
+        scales: {
+          xAxes: [{ 
+            ticks: {
+              fontColor: "#FFFFFF", // this here
+            },
+          }],
+          yAxes: [{
+            ticks: {
+              fontColor: "#FFFFFF", // this here
+            },
+            
+          }],
+        }
+      }
+      
+    });
+    </script>
+    <script>
+  
+      var ctx3 = document.getElementById('salesgraph2').getContext('2d');
+      const labels = {{ weeklabels|safe }};
+      const data3 = {
+        labels: labels,
+        datasets: [{
+          label: 'Weekly Revenue in Rupees',
+          data: {{ weekvalues|safe }},
+          fill: false,
+          borderColor: 'rgb(75, 192, 192)',
+          tension: 0.1,
+        }]
+      };
+      var myChart3 = new Chart(ctx3, {
+        type: 'line',
+        data: data3,
+        options: {
+          scales: {
+              xAxes: [{ 
+                  ticks: {
+                    fontColor: "#FFFFFF", // this here
+                  },
+                }],
+                yAxes: [{
+                  ticks: {
+                    fontColor: "#FFFFFF", // this here
+                  },
+                  
+                }],
+          }
+        }
+          
+      });
+      </script>
+  <script>
+    const counters = document.querySelectorAll('.increase');
+    
+    counters.forEach(counter => {
+        const speed = parseInt(counter.getAttribute('data-speed'));
+        //const speed = 400;
+        console.log(speed);
+        const updateCount = () => {
+            const target = +counter.getAttribute('data-target');
+            const count = +counter.innerText;
+            const inc = Math.floor(target / speed);
+            if (count < target) {
+                counter.innerText = count + inc;
+                setTimeout(updateCount, 1);
+            } else {
+                counter.innerText = target;
+            }
+        };
+
+        updateCount();
+    });
+
+  </script>
+  <script>
+    const observer = new MutationObserver(function(mutations){
+      mutations.forEach(function(mutation){
+        if(mutation.attributeName === 'aria-expanded'){
+          console.log(document.getElementById('profileDrop').getAttribute('aria-expanded'));
+          if (document.getElementById('profileDrop').getAttribute('aria-expanded') === 'true') {
+            func();              
+          }
+          else{
+            otherFunc();
+          }
+        }
+      })
+    });
+    const droplink = document.getElementById('profileDrop');
+    observer.observe(droplink,{
+      attributes: true,
+    });
+    function func(){
+      document.getElementById('profileIcon').className = 'd-none';
+    }
+    function otherFunc(){
+      document.getElementById('profileIcon').className = 'bi-person-circle';
+    }
+  </script>
+  </body>
+</html>

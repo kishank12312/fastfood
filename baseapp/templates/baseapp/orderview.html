@@ -91,6 +91,9 @@
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
         <div class="navbar-nav">
           <!--<a class="nav-link active" aria-current="page" href="#">Home</a>-->
+          {% if request.user.is_staff %}
+              <a class="nav-link d-flex align-items-center justify-content-center btn rounded btn-outline-warning lead mx-3" href="{% url 'admindashboard' %}">ADMIN DASHBOARD</a>
+              {% endif %}
           <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'home' %}">HOME</a>
           <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'cart' %}"> 
             <span class="cartcounter d-flex justify-content-center align-items-center px-1">{{ cartitems|length }}</span> &nbsp;Cart
@@ -120,7 +123,7 @@
         <br>
         <div class="row lead text-light">
             <div class="col" style="padding-left: 6%;">
-                <strong>Order Placed by User:</strong>&nbsp; {{ request.user.username  }}
+                <strong>Order Placed by User:</strong>&nbsp; {{ Order.0.CustomerID.user.username  }}
             </div>
         </div>
         <br>
@@ -159,6 +162,7 @@
         <br>
         <div class="row">
             <div class="col" style="padding-left: 6%; padding-right: 6%;">
+                <div class="table-responsive">
                 <table class="table table-dark">
                     <thead>
                       <tr>
@@ -191,6 +195,7 @@
                       </tr>
                     </tbody>
                   </table>
+                  </div>
             </div>
         </div>
         <br>
@@ -205,7 +210,11 @@
         <br><br>
     </div>
     <br><br>
+    {% if backurl == 'orders' %}
     <center><a href="{% url 'orders' %}" class="btn btn-warning">BACK</a></center>
+    {% else %}
+    <center><a href="{% url 'admindashboardorders' %}" class="btn btn-warning">BACK</a></center>
+    {% endif %}
     <br>
     
 

@@ -87,6 +87,9 @@
             <div class="navbar-nav">
               <!--<a class="nav-link active" aria-current="page" href="#">Home</a>-->
               {% if request.user.is_authenticated %}
+              {% if request.user.is_staff %}
+              <a class="nav-link d-flex align-items-center justify-content-center btn rounded btn-outline-warning lead mx-3" href="{% url 'admindashboard' %}">ADMIN DASHBOARD</a>
+              {% endif %}
               <a class="nav-link d-flex align-items-center justify-content-center mx-3" href="{% url 'cart' %}"> 
                 <span class="cartcounter d-flex justify-content-center align-items-center px-1">{{ AllCartItems|length }}</span> &nbsp;Cart
               </a>

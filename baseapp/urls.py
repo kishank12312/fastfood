@@ -19,5 +19,7 @@ urlpatterns = [
     path('addressremove/', views.AddressRemove, name='addressremove'),
     path('addressadd/', views.AddressAdd, name='addressadd'),
     path('accountsetup/', views.SetUp, name='setup'),
+    path('admindashboard/', views.adminDashboard, name='admindashboard'),
+    path('admindashboardorders/', views.adminDashboardorders, name='admindashboardorders'),
     path('mailtest/', views.mail),
 ]

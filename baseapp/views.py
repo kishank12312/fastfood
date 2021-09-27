@@ -1,3 +1,4 @@
+from django.db.models.fields import DateField
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
@@ -6,7 +7,9 @@ from django.contrib.auth import authenticate, login, logout
 from django.urls import reverse
 from django.contrib import messages
 from django.core.mail import send_mail
-
+from django.db.models.functions import Cast
+from django.db import connection
+from django.db.models import Sum,F
 from .models import *
 from . import Functions
 
@@ -334,6 +337,7 @@ def orderhistory(request):
                 context['Order'] = requiredOrder
                 print(requiredOrder)
                 context['total'] = total
+                context['backurl'] = 'orders'
                 return render(request, 'baseapp/orderview.html', context)
 
         return render(request, 'baseapp/orders.html', context)
@@ -450,3 +454,159 @@ def AddressChange(request):
 def mail(request):
     x = Customer.objects.filter(user=request.user)
     return HttpResponse(len(x))
+
+def adminDashboard(request):
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            context = {}
+            currentCustomer = Customer.objects.get(user=request.user)
+            queryset = Cart.objects.filter(CustomerID=currentCustomer)
+            cartitems = []
+            for obj in queryset:
+                cartitems.append(obj.ProductID)
+            context['cartitems'] = cartitems
+            context['customer'] = currentCustomer
+
+            
+            #CUSTOMERS:
+            customerresultset = Customer.objects.all()
+            print(len(customerresultset))
+            allcustomers = []
+            count = 0
+            for cust in customerresultset:
+                if count == 0:
+                    tempset = []
+                if count == 9:
+                    count = 0
+                    tempset.append(cust)    
+                    allcustomers.append(tempset)
+                    continue
+
+                tempset.append(cust)
+                count+=1
+            if len(tempset) > 0:
+                allcustomers.append(tempset)
+
+            context['allcustomers'] = allcustomers
+            #END OF CUSTOMER TABLE
+
+
+
+            #ORDERS TABLE
+            context['totalorders'] = len(Orders.objects.all())
+            
+
+            #PRODUCT QUANTITIES
+            quantities = Orders.objects.values("ProductID").order_by("ProductID").annotate(quantity=Sum('Qty'))
+            maxprod = [0,0]
+            salesdist = {'Burgers':0, 'Pizzas':0, 'Wraps':0, 'Sides':0}
+            total_revenue = 0
+            for item in quantities:
+                if item['quantity'] >= maxprod[1]:
+                    maxprod[0] = item['ProductID']
+                    maxprod[1] = item['quantity']
+                if item['ProductID'] <= 10:
+                    salesdist['Burgers'] += item['quantity']
+                elif 11 <= item['ProductID'] <= 17:    
+                    salesdist['Pizzas'] += item['quantity']
+                elif 24 <= item['ProductID'] <= 26:    
+                    salesdist['Wraps'] += item['quantity']
+                else:
+                    salesdist['Sides'] += item['quantity']
+                total_revenue += Products.objects.get(ProductID=item['ProductID']).Price * item['quantity']
+            maxprod[0] = Products.objects.get(ProductID=maxprod[0])
+
+            cursor = connection.cursor()
+            cursor.execute('SELECT  "CustomerID_id", SUM("ItemPrice" * "Qty") FROM PUBLIC.BASEAPP_ORDERS GROUP BY "CustomerID_id" ORDER BY SUM("ItemPrice" * "Qty") DESC LIMIT 1;')
+            row = cursor.fetchall()
+            
+            context['maxcust'] = [Customer.objects.get(id=int(row[0][0])).CustomerName, int(row[0][1])]
+            context['maxproduct'] = maxprod
+            context['revenue'] = total_revenue
+            newdist = []
+            newdist.append(salesdist['Wraps'])
+            newdist.append(salesdist['Pizzas'])
+            newdist.append(salesdist['Sides'])
+            newdist.append(salesdist['Burgers'])
+            finaldist = ''
+            for i in newdist:
+                finaldist += str(i) + ','
+            context['salesdist'] = finaldist
+
+
+            cursor = connection.cursor()
+            cursor.execute('SELECT DATE_PART(\'week\', DATE("DateOrdered")) AS Week, SUM("ItemPrice"*"Qty") FROM PUBLIC.BASEAPP_ORDERS GROUP BY DATE_PART(\'week\', DATE("DateOrdered"));')
+            row = cursor.fetchall()
+            weeklabels,weekvalues = [],[]
+            for i in row:
+                weeklabels.append('Week ' + str(int(i[0])))
+                weekvalues.append(int(i[1]))
+            context['weeklabels'] = weeklabels
+            context['weekvalues'] = weekvalues
+            return render(request, 'baseapp/adminDashboard.html', context)
+        else:
+            messages.info(request, 'You are not authorised to view this page')
+            return(redirect(reverse('home')))
+    else:
+        return redirect(reverse('login'))
+
+def adminDashboardorders(request):
+    if request.user.is_authenticated:
+        if request.user.is_staff:
+            context = {}
+            currentCustomer = Customer.objects.get(user=request.user)
+            queryset = Cart.objects.filter(CustomerID=currentCustomer)
+            cartitems = []
+            for obj in queryset:
+                cartitems.append(obj.ProductID)
+            context['cartitems'] = cartitems
+            context['customer'] = currentCustomer
+            
+            AllOrderedObjects = Orders.objects.all().order_by('OrderNumber')
+        #print(AllOrderedObjects)
+            if len(AllOrderedObjects) == 0:
+                context['SeparateOrders'] = [] 
+                context['OrderCosts'] = []
+                return render(request, 'baseapp/orders.html', context)
+            SeparateOrders = []
+            TempOrderNum = AllOrderedObjects[0].OrderNumber
+            o = []
+            for Object in AllOrderedObjects:
+                if Object.OrderNumber == TempOrderNum:
+                    o.append(Object)
+                else:
+                    SeparateOrders.append(o)
+                    o = []
+                    o.append(Object)
+                    TempOrderNum = Object.OrderNumber
+            if len(o) > 0:
+                SeparateOrders.append(o)
+            if SeparateOrders == []:
+                SeparateOrders.append(o)
+            SeparateOrders.sort(reverse=True, key= lambda x: x[0].DateOrdered)
+            OrderCosts = Functions.PriceList(SeparateOrders)
+            context['SeparateOrders'] = SeparateOrders
+            context['OrderCosts'] = OrderCosts
+            if request.method == "GET":
+                if request.GET.get('OrderView') is not None:
+                    onum = request.GET.get('OrderView')
+                    requiredOrder = None
+                    index = 0
+                    for Order in SeparateOrders:
+                        if Order[0].OrderNumber == onum:
+                            requiredOrder = Order
+                            total = OrderCosts[index]
+                        index+=1
+                    context = {}
+                    context['Order'] = requiredOrder
+                    #print(requiredOrder)
+                    context['total'] = total
+                    context['backurl'] = 'admindashboard'
+                    return render(request, 'baseapp/orderview.html', context)
+
+            return render(request, 'baseapp/adminDashboardorders.html', context)
+        else:
+            messages.info(request, 'You are not authorised to view this page')
+            return(redirect(reverse('home')))
+    else:
+        return redirect(reverse('login'))
