@@ -87,6 +87,13 @@
           padding: 1%;
           border-radius: 50%;
         }
+        .page-item.active .page-link{
+          background-color: #0d6efd !important;
+
+        }
+        .page-link{
+          background-color: #1d1d1d !important;
+        }
     </style>
 </head>
 <body>
@@ -186,224 +193,90 @@
 
     <br><br>
     <div class="container">
-        <p class="display-5 text-light">MENU</p>
-        <br><br>
-        <div class="row gy-4">
-            <div class="col d-flex justify-content-center"><a href="#burgerbanner" class="btn btn-success">BURGERS</a></div>
-            <div class="col d-flex justify-content-center"><a href="#pizzabanner" class="btn btn-primary">PIZZAS</a></div>
-            <div class="col d-flex justify-content-center"><a href="#wrapbanner" class="btn btn-danger">WRAPS</a></div>
-            <div class="col d-flex justify-content-center"><a href="#sidebanner" class="btn btn-warning">SIDES</a></div>
-        </div>
-        <br><br>
-        <div class="display-6 bg-success text-light rounded-pill" id="burgerbanner">&nbsp; BURGERS</div>
-        <br>
-
-
-
-        {% for objectset in burgergrouped %}
-          <div class="row gy-4 justify-content-md-start justify-content-center ">
-            {% for object in objectset %}
-            <div class="col-8 col-md-6 col-lg-3">
-              <div class="card text-center bg-dark shadow-lg">
-                <img src="{{ object.Image.url }}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-light">{{ object.ProductName }}</h5>
-                  {% if object.Vegetarian %}
-                  <center><p class="VegOrNot" style="border:solid 1px rgb(0, 255, 0); color: rgb(0, 255, 0);">VEG</p></center>
-                  {% else %}<center><p class="VegOrNot" style="border:solid 1px red; color: red;">NON-VEG</p></center>{% endif %}
-                  <p class="card-text text-light lead fs-6">{{ object.Description }}</p>
-                  <div class="row align-items-center">
-                    <div class="col text-warning fs-4 d-flex align-items-center justify-content-center">₹{{ object.Price }}</div>
-                    <div class="col d-flex align-items-center justify-content-center">
-                      {% if request.user.is_authenticated %}
-                      {% if object in AllCartItems %}
-                      <form id = "udp{{ object.ProductID }}">
-                        <span class="text-center d-flex justify-content-center align-items-center">
-                          <button type="submit" class="btn btn-danger cartupdate px-2 py-2" id="{{object.ProductID}}u-" name="ProductID"  value="{{object.ProductID}}">-1</button>
-                          &nbsp;&nbsp;
-                          <p class="text-light mb-0" id="qtyof{{ object.ProductID }}">{{ Cartobjects|productqty:object }}</p>
-                          &nbsp;&nbsp;
-                          <button type="submit" class="btn btn-success cartupdate px-2 py-2" id="{{object.ProductID}}u+" name="ProductID"  value="{{object.ProductID}}">+1</button>
-                        </span>
-                      </form>
-                      {% else %}
-                      <form id = "udp{{ object.ProductID }}">
-                        <span id="spn{{ object.ProductID }}" class="text-center d-flex justify-content-center align-items-center">
-                          <button type="submit" class="btn btn-primary cartadd" id="{{object.ProductID}}" name="ProductID"  value="{{object.ProductID}}">Add To Cart</button>
-                        </span>
-                      </form>
-                      {% endif %}
-                      {% else %}
-                      <a href="{% url 'login' %}?next={% url 'menu' %}" class="btn btn-primary" onclick="alert('You need to login first to add to cart')">Add To Cart</a> 
-                      {% endif %}
-                    </div> 
-                  </div>
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-          <br>
-          {% endfor %}
-        <br><br>
-        <div class="display-6 bg-primary text-light rounded-pill" id="pizzabanner">&nbsp; PIZZAS</div>
-        <br>
-
-
-
-
-        {% for objectset in pizzagrouped %}
-          <div class="row gy-4 justify-content-md-start justify-content-center">
-            {% for object in objectset %}
-            <div class="col-8 col-md-6 col-lg-3">
-              <div class="card text-center bg-dark shadow-lg">
-                <img src="{{ object.Image.url }}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-light">{{ object.ProductName }}</h5>
-                  {% if object.Vegetarian %}
-                  <center><p class="VegOrNot" style="border:solid 1px rgb(0, 255, 0); color: rgb(0, 255, 0);">VEG</p></center>
-                  {% else %}<center><p class="VegOrNot" style="border:solid 1px red; color: red;">NON-VEG</p></center>{% endif %}
-                  <p class="card-text text-light lead fs-6">{{ object.Description }}</p>
-                  <div class="row align-items-center">
-                    <div class="col text-warning fs-4 d-flex align-items-center justify-content-center">₹{{ object.Price }}</div>
-                    <div class="col d-flex align-items-center justify-content-center">
-                      {% if request.user.is_authenticated %}
-                      {% if object in AllCartItems %}
-                      <form id = "udp{{ object.ProductID }}">
-                        <span class="text-center d-flex justify-content-center align-items-center">
-                          <button type="submit" class="btn btn-danger cartupdate px-2 py-2" id="{{object.ProductID}}u-" name="ProductID"  value="{{object.ProductID}}">-1</button>
-                          &nbsp;&nbsp;
-                          <p class="text-light mb-0" id="qtyof{{ object.ProductID }}">{{ Cartobjects|productqty:object }}</p>
-                          &nbsp;&nbsp;
-                          <button type="submit" class="btn btn-success cartupdate px-2 py-2" id="{{object.ProductID}}u+" name="ProductID"  value="{{object.ProductID}}">+1</button>
-                        </span>
-                      </form>
-                      {% else %}
-                      <form id = "udp{{ object.ProductID }}">
-                        <span id="spn{{ object.ProductID }}" class="text-center d-flex justify-content-center align-items-center">
-                          <button type="submit" class="btn btn-primary cartadd" id="{{object.ProductID}}" name="ProductID"  value="{{object.ProductID}}">Add To Cart</button>
-                        </span>
-                      </form>
-                      {% endif %}
-                      {% else %}
-                      <a href="{% url 'login' %}?next={% url 'menu' %}" class="btn btn-primary" onclick="alert('You need to login first to add to cart')">Add To Cart</a> 
-                      {% endif %}
-                    </div>  
-                  </div>
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-          <br>
-          {% endfor %}
-        <br><br>
-        <div class="display-6 bg-danger text-light rounded-pill" id="wrapbanner">&nbsp; WRAPS</div>
-        <br>
-
-
-
-
+      <p class="display-5 text-light">MENU</p>
+      <br><br>
       
-        {% for objectset in wrapgrouped %}
-          <div class="row gy-4 justify-content-md-start justify-content-center">
-            {% for object in objectset %}
-            <div class="col-8 col-md-6 col-lg-3">
-              <div class="card text-center bg-dark shadow-lg">
-                <img src="{{ object.Image.url }}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-light">{{ object.ProductName }}</h5>
-                  {% if object.Vegetarian %}
-                  <center><p class="VegOrNot" style="border:solid 1px rgb(0, 255, 0); color: rgb(0, 255, 0);">VEG</p></center>
-                  {% else %}<center><p class="VegOrNot" style="border:solid 1px red; color: red;">NON-VEG</p></center>{% endif %}
-                  <p class="card-text text-light lead fs-6">{{ object.Description }}</p>
-                  <div class="row align-items-center">
-                    <div class="col text-warning fs-4 d-flex align-items-center justify-content-center">₹{{ object.Price }}</div>
-                    <div class="col d-flex align-items-center justify-content-center">
-                      {% if request.user.is_authenticated %}
-                      {% if object in AllCartItems %}
-                      <form id = "udp{{ object.ProductID }}">
-                        <span class="text-center d-flex justify-content-center align-items-center">
-                          <button type="submit" class="btn btn-danger cartupdate px-2 py-2" id="{{object.ProductID}}u-" name="ProductID"  value="{{object.ProductID}}">-1</button>
-                          &nbsp;&nbsp;
-                          <p class="text-light mb-0" id="qtyof{{ object.ProductID }}">{{ Cartobjects|productqty:object }}</p>
-                          &nbsp;&nbsp;
-                          <button type="submit" class="btn btn-success cartupdate px-2 py-2" id="{{object.ProductID}}u+" name="ProductID"  value="{{object.ProductID}}">+1</button>
-                        </span>
-                      </form>
-                      {% else %}
-                      <form id = "udp{{ object.ProductID }}">
-                        <span id="spn{{ object.ProductID }}" class="text-center d-flex justify-content-center align-items-center">
-                          <button type="submit" class="btn btn-primary cartadd" id="{{object.ProductID}}" name="ProductID"  value="{{object.ProductID}}">Add To Cart</button>
-                        </span>
-                      </form>
-                      {% endif %}
-                      {% else %}
-                      <a href="{% url 'login' %}?next={% url 'menu' %}" class="btn btn-primary" onclick="alert('You need to login first to add to cart')">Add To Cart</a> 
-                      {% endif %}
-                    </div> 
-                  </div>
+
+      <div class="row"><div class="col d-flex justify-content-center">
+        {% if AllMenuItems.has_other_pages %}
+        <ul class="pagination">
+
+          {% for i in AllMenuItems.paginator.page_range %}
+          {% if AllMenuItems.number == i %}
+          <li class="page-item active"><a class="page-link" href="?page={{ i }}">Page {{ i }}</a></li>
+          {% else %}
+          <li class="page-item "><a class="page-link" href="?page={{ i }}">Page {{ i }}</a></li>
+          {% endif %}
+          {% endfor %}
+
+        </ul>
+        {% endif %}
+      </div></div>
+      <br>
+
+      {% for object in AllMenuItems %}
+      {% if forloop.first %}<div class="row gy-4 justify-content-md-start justify-content-center ">{% endif %}
+          <div class="col-8 col-md-6 col-lg-3">
+            <div class="card text-center bg-dark shadow-lg">
+              <img src="{{ object.Image.url }}" class="card-img-top" alt="...">
+              <div class="card-body">
+                <h5 class="card-title text-light">{{ object.ProductName }}</h5>
+                {% if object.Vegetarian %}
+                <center><p class="VegOrNot" style="border:solid 1px rgb(0, 255, 0); color: rgb(0, 255, 0);">VEG</p></center>
+                {% else %}<center><p class="VegOrNot" style="border:solid 1px red; color: red;">NON-VEG</p></center>{% endif %}
+                <p class="card-text text-light lead fs-6">{{ object.Description }}</p>
+                <div class="row align-items-center">
+                  <div class="col text-warning fs-4 d-flex align-items-center justify-content-center">₹{{ object.Price }}</div>
+                  <div class="col d-flex align-items-center justify-content-center">
+                    {% if request.user.is_authenticated %}
+                    {% if object in AllCartItems %}
+                    <form id = "udp{{ object.ProductID }}">
+                      <span class="text-center d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-danger cartupdate px-2 py-2" id="{{object.ProductID}}u-" name="ProductID"  value="{{object.ProductID}}">-1</button>
+                        &nbsp;&nbsp;
+                        <p class="text-light mb-0" id="qtyof{{ object.ProductID }}">{{ Cartobjects|productqty:object }}</p>
+                        &nbsp;&nbsp;
+                        <button type="submit" class="btn btn-success cartupdate px-2 py-2" id="{{object.ProductID}}u+" name="ProductID"  value="{{object.ProductID}}">+1</button>
+                      </span>
+                    </form>
+                    {% else %}
+                    <form id = "udp{{ object.ProductID }}">
+                      <span id="spn{{ object.ProductID }}" class="text-center d-flex justify-content-center align-items-center">
+                        <button type="submit" class="btn btn-primary cartadd" id="{{object.ProductID}}" name="ProductID"  value="{{object.ProductID}}">Add To Cart</button>
+                      </span>
+                    </form>
+                    {% endif %}
+                    {% else %}
+                    <a href="{% url 'login' %}?next={% url 'menu' %}" class="btn btn-primary" onclick="alert('You need to login first to add to cart')">Add To Cart</a> 
+                    {% endif %}
+                  </div> 
                 </div>
               </div>
             </div>
-            {% endfor %}
           </div>
-          <br>
+          {% if forloop.counter|divisibleby:4 %}</div><br><div class="row gy-4 justify-content-md-start justify-content-center ">{% endif %}
+          {% if forloop.last %}</div>{% endif %}
+        
+        {% endfor %}
+      <br><br>
+      <div class="row"><div class="col d-flex justify-content-center">
+        {% if AllMenuItems.has_other_pages %}
+        <ul class="pagination">
+
+          {% for i in AllMenuItems.paginator.page_range %}
+          {% if AllMenuItems.number == i %}
+          <li class="page-item active"><a class="page-link" href="?page={{ i }}">Page {{ i }}</a></li>
+          {% else %}
+          <li class="page-item "><a class="page-link" href="?page={{ i }}">Page {{ i }}</a></li>
+          {% endif %}
           {% endfor %}
-        <br><br>
-        <div class="display-6 bg-warning text-dark rounded-pill" id="sidebanner">&nbsp; SIDES</div>
-        <br>
 
-
-
-
-
-        {% for objectset in sidegrouped %}
-          <div class="row gy-4 justify-content-md-start justify-content-center">
-            {% for object in objectset %}
-            <div class="col-8 col-md-6 col-lg-3">
-              <div class="card text-center bg-dark shadow-lg">
-                <img src="{{ object.Image.url }}" class="card-img-top" alt="...">
-                <div class="card-body">
-                  <h5 class="card-title text-light">{{ object.ProductName }}</h5>
-                  {% if object.Vegetarian %}
-                  <center><p class="VegOrNot" style="border:solid 1px rgb(0, 255, 0); color: rgb(0, 255, 0);">VEG</p></center>
-                  {% else %}<center><p class="VegOrNot" style="border:solid 1px rgb(255, 0, 0); color: rgb(255, 0, 0);">NON-VEG</p></center>{% endif %}
-                  <p class="card-text text-light lead fs-6">{{ object.Description }}</p>
-                  <div class="row align-items-center">
-                    <div class="col text-warning fs-4 d-flex align-items-center justify-content-center">₹{{ object.Price }}</div>
-                    <div class="col d-flex align-items-center justify-content-center">
-                      {% if request.user.is_authenticated %}
-                      {% if object in AllCartItems %}
-                      <form id = "udp{{ object.ProductID }}">
-                        <span class="text-center d-flex justify-content-center align-items-center">
-                          <button type="submit" class="btn btn-danger cartupdate px-2 py-2" id="{{object.ProductID}}u-" name="ProductID"  value="{{object.ProductID}}">-1</button>
-                          &nbsp;&nbsp;
-                          <p class="text-light mb-0" id="qtyof{{ object.ProductID }}">{{ Cartobjects|productqty:object }}</p>
-                          &nbsp;&nbsp;
-                          <button type="submit" class="btn btn-success cartupdate px-2 py-2" id="{{object.ProductID}}u+" name="ProductID"  value="{{object.ProductID}}">+1</button>
-                        </span>
-                      </form>
-                      {% else %}
-                      <form id = "udp{{ object.ProductID }}">
-                        <span id="spn{{ object.ProductID }}" class="text-center d-flex justify-content-center align-items-center">
-                          <button type="submit" class="btn btn-primary cartadd" id="{{object.ProductID}}" name="ProductID"  value="{{object.ProductID}}">Add To Cart</button>
-                        </span>
-                      </form>
-                      {% endif %}
-                      {% else %}
-                      <a href="{% url 'login' %}?next={% url 'menu' %}" class="btn btn-primary" onclick="alert('You need to login first to add to cart')">Add To Cart</a> 
-                      {% endif %}
-                    </div> 
-                  </div>
-                </div>
-              </div>
-            </div>
-            {% endfor %}
-          </div>
-          <br>
-          {% endfor %}
-    </div>
+        </ul>
+        {% endif %}
+      </div></div>
+      
+      
+  </div>
   
     <br>
     <br>

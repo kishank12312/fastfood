@@ -12,6 +12,8 @@ from django.db import connection
 from django.db.models import Sum,F
 from .models import *
 from . import Functions
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+import random
 
 from django.db.models import F
 # Create your views here.
@@ -98,47 +100,21 @@ def home(request):
 
 
 def Menu(request):
-    burgers = Products.objects.filter(Category='Burger')
-    burgergrouped,burgerset = [],[]
-    for burger in burgers:
-        if len(burgerset) < 4:
-            burgerset.append(burger)
-        if len(burgerset) == 4:
-            burgergrouped.append(burgerset)
-            burgerset = []
-    if len(burgerset) > 0:
-        burgergrouped.append(burgerset)
-    pizzas = Products.objects.filter(Category='Pizza')
-    pizzagrouped,pizzaset = [],[]
-    for pizza in pizzas:
-        if len(pizzaset) < 4:
-            pizzaset.append(pizza)
-        if len(pizzaset) == 4:
-            pizzagrouped.append(pizzaset)
-            pizzaset = []
-    if len(pizzaset) > 0:
-        pizzagrouped.append(pizzaset)
-    wraps = Products.objects.filter(Category='Wraps')
-    wrapgrouped,wrapset = [],[]
-    for wrap in wraps:
-        if len(wrapset) < 4:
-            wrapset.append(wrap)
-        if len(wrapset) == 4:
-            wrapgrouped.append(wrapset)
-            wrapset = []
-    if len(wrapset) > 0:
-        wrapgrouped.append(wrapset)
-    sides = Products.objects.filter(Category='Sides')
-    sidegrouped,sideset = [],[]
-    for side in sides:
-        if len(sideset) < 4:
-            sideset.append(side)
-        if len(sideset) == 4:
-            sidegrouped.append(sideset)
-            sideset = []
-    if len(sideset) > 0:
-        sidegrouped.append(sideset)
-    context = {'burgergrouped':burgergrouped, 'pizzagrouped':pizzagrouped, 'wrapgrouped': wrapgrouped, 'sidegrouped':sidegrouped}
+    AllMenuItems = Products.objects.all()
+    context = {}
+    if request.user.is_authenticated:
+        x = Customer.objects.filter(user=request.user)
+        if len(x) != 1:
+            return redirect(reverse('setup'))
+        currentCustomer = Customer.objects.get(user=request.user)
+        queryset = Cart.objects.filter(CustomerID=currentCustomer)
+        cartitems = []
+        for obj in queryset:
+            cartitems.append(obj.ProductID)
+        context['AllCartItems'] = cartitems
+        context['Cartobjects'] = queryset
+    else:
+        context['AllCartItems'] = None
     if request.user.is_authenticated:
         x = Customer.objects.filter(user=request.user)
         if len(x) != 1:
@@ -155,7 +131,6 @@ def Menu(request):
     if request.method == 'GET':
         ProductID = request.GET.get('ProductID')
         Update = request.GET.get("Update")
-        print(Update)
         if Update is not None:
             if Update == "add":
                 currentCustomer = Customer.objects.get(user=request.user)
@@ -181,6 +156,16 @@ def Menu(request):
             addedproduct = Products.objects.get(ProductID = int(ProductID))
             cartitem = Cart(CustomerID= currentCustomer, ProductID= addedproduct)
             cartitem.save(force_insert=True)
+        else:
+            page = request.GET.get('page', 1)
+            paginator = Paginator(AllMenuItems, 8)
+            try:
+                Items = paginator.page(page)
+            except PageNotAnInteger:
+                Items = paginator.page(1)
+            except EmptyPage:
+                Items = paginator.page(paginator.num_pages)
+            context['AllMenuItems'] = Items
 
 
     return render(request, 'baseapp/menu.html', context)
@@ -452,8 +437,8 @@ def AddressChange(request):
         return redirect(reverse('login'))
 
 def mail(request):
-    x = Customer.objects.filter(user=request.user)
-    return HttpResponse(len(x))
+    pass
+
 
 def adminDashboard(request):
     if request.user.is_authenticated:
