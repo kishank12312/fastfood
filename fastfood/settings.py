@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.gis',
+    'leaflet',
     'baseapp',
     'allauth',
     'allauth.account',
@@ -88,7 +89,7 @@ WSGI_APPLICATION = 'fastfood.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
         'NAME': 'd28tauiq9rk3c3',
         'HOST': 'ec2-3-230-61-252.compute-1.amazonaws.com',
         'PORT': 5432,
@@ -190,3 +191,8 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (23.341070, 78.206458),
+    'DEFAULT_ZOOM': 4,
+}

@@ -13,6 +13,7 @@ from django.db.models import Sum,F
 from .models import *
 from . import Functions
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib.gis.geos import Point
 import random
 
 from django.db.models import F
@@ -70,6 +71,10 @@ def SetUp(request):
             if form.is_valid():
                 obj = form.save(commit=False)
                 obj.user = request.user
+                lattitude = float(request.POST.get('lat'))
+                longitude = float(request.POST.get('lng'))
+                pnt = Point(longitude,lattitude)
+                obj.Address = pnt
                 obj.save()
             return redirect(reverse('home'))
 
@@ -236,13 +241,11 @@ def summary(request):
 
         if request.method == 'POST':
             uid = request.POST.get('csrfmiddlewaretoken')
-            address = request.POST.get('Address')
             for product in itemswithqty:
                 newOrder = Orders(
                     OrderNumber = uid,
                     CustomerID = currentCustomer,
                     ProductID = product[0],
-                    Address = address,
                     OrderStatus = 'Order Success',
                     ItemPrice = product[0].Price,
                     Qty = product[1],
@@ -267,6 +270,7 @@ def success(request):
         for obj in queryset:
             cartitems.append(obj.ProductID)
         context['AllCartItems'] = cartitems
+        #print(currentCustomer.Address)
         return render(request, 'baseapp/success.html', context)
     else:
         return redirect(reverse('login'))
@@ -383,61 +387,21 @@ def NameChange(request):
         return render(request, 'baseapp/namechange.html', context)
     else:
         return redirect(reverse('login'))
-def AddressRemove(request):
-    if request.user.is_authenticated:
-        context = {}
-        currentCustomer = Customer.objects.get(user=request.user)
-        queryset = Cart.objects.filter(CustomerID=currentCustomer)
-        cartitems = []
-        for obj in queryset:
-            cartitems.append(obj.ProductID)
-        context['cartitems'] = cartitems
-        context['customer'] = currentCustomer
-        currentCustomer.Address = ""
-        currentCustomer.save(force_update=True)
-        return render(request, 'baseapp/addressremove.html', context)
-    else:
-        return redirect(reverse('login'))
-def AddressAdd(request):
-    if request.user.is_authenticated:
-        context = {}
-        currentCustomer = Customer.objects.get(user=request.user)
-        queryset = Cart.objects.filter(CustomerID=currentCustomer)
-        cartitems = []
-        for obj in queryset:
-            cartitems.append(obj.ProductID)
-        context['cartitems'] = cartitems
-        context['customer'] = currentCustomer
-        if request.method == 'POST':
-            new = request.POST.get('NewAddress')
-            currentCustomer.Address = new
-            currentCustomer.save(force_update=True)
-            return redirect(reverse('profile'))
-        return render(request, 'baseapp/addAdress.html', context)
-    else:
-        return redirect(reverse('login'))
-def AddressChange(request):
-    if request.user.is_authenticated:
-        context = {}
-        currentCustomer = Customer.objects.get(user=request.user)
-        queryset = Cart.objects.filter(CustomerID=currentCustomer)
-        cartitems = []
-        for obj in queryset:
-            cartitems.append(obj.ProductID)
-        context['cartitems'] = cartitems
-        context['customer'] = currentCustomer
-        if request.method == 'POST':
-            new = request.POST.get('NewAddress')
-            currentCustomer.Address = new
-            currentCustomer.save(force_update=True)
-            return redirect(reverse('profile'))
-        return render(request, 'baseapp/addresschange.html', context)
 
-    else:
-        return redirect(reverse('login'))
 
 def mail(request):
-    pass
+    if request.user.is_authenticated:
+        form = CustomerForm()
+        context = {'form':form}
+
+        if request.method == 'POST':
+            print(request.POST)
+            return render(request, 'baseapp/test.html', context)
+
+        return render(request, 'baseapp/test.html', context)
+    else:
+        return redirect(reverse('home'))
+    
 
 
 def adminDashboard(request):

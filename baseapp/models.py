@@ -1,12 +1,14 @@
-from django.db import models
+from django import db
 from django.contrib.auth.models import User
+from django.contrib.gis.db import models
+from django.contrib.gis.geos import Point
 from django.utils import tree
 
 
 class Customer(models.Model):
     user = models.OneToOneField(User, null=True, on_delete=models.CASCADE)
     CustomerName = models.CharField(max_length=300, null=True, blank=True)
-    Address = models.TextField(null=True, blank=True)
+    Address = models.PointField(null=True)
     DateOfBirth = models.DateField(auto_now_add=False)
 
 class Products(models.Model):
@@ -34,6 +36,5 @@ class Orders(models.Model):
     ProductID = models.ForeignKey(Products,on_delete=models.SET_NULL, null=True)
     DateOrdered = models.DateTimeField(auto_now_add=True)
     OrderStatus = models.CharField(max_length=100, null=True, blank=True)
-    Address = models.TextField(null=True, blank=True)
     ItemPrice = models.IntegerField(null=True)
     Qty = models.IntegerField(default=1)

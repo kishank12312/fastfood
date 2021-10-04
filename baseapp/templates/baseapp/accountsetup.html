@@ -1,4 +1,5 @@
 {% load static %}
+{% load leaflet_tags %}
 
 <html lang="en">
 <head>
@@ -8,6 +9,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="shortcut icon" href="{%  static 'images/favico.png' %}">
+    {% leaflet_css %}
+    {% leaflet_js %}
     <title>Account Setup</title>
     <style>
         .cartcounter {
@@ -57,6 +60,9 @@
           width: 100%;
           height: 3.5rem;            /* Footer height */
         }
+        #main{
+          height: 100%;
+        }
     </style>
 </head>
 <body class="bg-dark">
@@ -88,7 +94,12 @@
     <!-- TITLE -->
     <div class="container display-4 text-light d-flex justify-content-center">Set Up your Account</div><br><br>
     <!-- END OF TITLE -->
-    
+    <script>
+      var mapsPlaceholder = [];
+      L.Map.addInitHook(function () {
+        mapsPlaceholder.push(this); // Use whatever global scope variable you like.
+      });
+    </script>
     <div class="container">
       <div class="row">
         <div class="col"></div>
@@ -98,34 +109,134 @@
             {% csrf_token %}
             {% for field in form %}
             <div class="lead">{{ field.label_tag }}</div>
-            {% if field.label == 'Address' %} <p class="text-danger">This will be your stored address, can be changed later or skipped as of now</p> {% endif %}
             {{ field }} 
             <br>
             {% endfor %}
+            <input required type="hidden" name="lat" id="id_lat">
+            <input required type="hidden" name="lng" id="id_lng">
           </div>
           <div class="col"></div>
         </div>
+        <div class="row justify-content-center">
+        <div class="col"></div>
+        <div class="col-12 col-sm-11 col-md-10 col-lg-8">
+          <p class="lead text-light fs-3">Your Address: </p>
+          <center>
+            <button type="button" class="btn btn-outline-info" style="width: fit-content;" onclick="currLocation()">USE MY CURRENT LOCATION</button>
+            &nbsp;
+            <button type="button" class="btn btn-outline-danger" style="width: fit-content;" onclick="removeMarker()">REMOVE MARKER</button>
+          </center>
+          <br>  
+          {% leaflet_map "main" callback="mapfunction"  %}
+        </div>
+        <div class="col"></div>
+        </div>
+        <br><br><br><br><br><br>
+
         <div class="row">
         <div class="col"></div>
-        <div class="col d-flex justify-content-center"><input class="btn btn-primary" type="submit" name="Create User" value="Save"></div>
+        <div class="col d-flex justify-content-center"><input class="btn btn-secondary" disabled id="formsubmit" type="submit" name="Create User" value="Save"></div>
         <div class="col"></div>
       </div>
       </form>
 
     </div>
-    <br><br><br>
   </div>
-    <footer id="footer" class="page-footer">
-      <div class="footer-copyright text-center text-light py-3">© 2021 Copyright: &nbsp;<a href="#">FastFood Online™</a></div>
-    </footer>
+ <br><br>
+<footer id="footer" class="page-footer">
+  <div class="footer-copyright text-center text-light py-3">© 2021 Copyright: &nbsp;<a href="{% url 'home' %}">FastFood Online™</a></div>
+</footer>
 </div>
 
 
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script>
+      document.getElementById('id_DateOfBirth').required = true;
       document.getElementById('id_CustomerName').required = true;
+      var mapsPlaceholder = [];
+      var marker = null;
+      function updater(mapsPlaceholder, lat,lng){
+        var map = mapsPlaceholder[0]; 
+        if (marker !== null) {
+            map.removeLayer(marker);
+          }
+          //console.log(e);
+          document.getElementById('id_lat').value = lat;
+          document.getElementById('id_lng').value = lng;
+          marker = new L.marker([lat,lng]);
+          marker.bindPopup("<b>Your Chosen Location</b>").openPopup();
+          marker.addTo(map);
+          map.flyTo([lat,lng],13, {animate: true, duration: 1})
+      }
+      function mapfunction(map, options){
+        mapsPlaceholder.push(map);
+        //console.log(mapsPlaceholder);
+        map.on('click', function(e){
+          if (marker !== null) {
+            map.removeLayer(marker);
+          }
+          //console.log(e);
+          var lat = e.latlng.lat;
+          var lng = e.latlng.lng;
+          updater(mapsPlaceholder,lat,lng);
+          enableSubmit();
+        })
+      }
+      function currLocation(){
+          navigator.geolocation.getCurrentPosition(
+            // Success function
+            showPosition, 
+            // Error function
+            function(error) {
+                switch(error.code) {
+                    case error.PERMISSION_DENIED:
+                        alert("User denied the request for Geolocation.");
+                        break;
+                    case error.POSITION_UNAVAILABLE:
+                        alert("Location information is unavailable.");
+                        break;
+                    case error.TIMEOUT:
+                        alert("The request to get user location timed out.");
+                        break;
+                    case error.UNKNOWN_ERROR:
+                        alert("An unknown error occurred.");
+                        break;
+                }
+            }, 
+            // Options. See MDN for details.
+            {
+               enableHighAccuracy: true,
+               timeout: 5000,
+               maximumAge: 0
+            });
+        }
+        function showPosition(position) {
+          var lat = position.coords.latitude; 
+          var lng = position.coords.longitude; 
+          updater(mapsPlaceholder,lat,lng);
+          mapsPlaceholder[0].flyTo([lat,lng],13, {animate: true, duration: 1});
+          enableSubmit();
+        }
+        function removeMarker(){
+          var map = mapsPlaceholder[0]; 
+          if (marker !== null) {
+            map.removeLayer(marker);
+          }
+          document.getElementById('id_lat').removeAttribute('value');
+          document.getElementById('id_lng').removeAttribute('value');
+          diableSubmit();
+        }
+        function diableSubmit(){
+          document.getElementById('formsubmit').classList = 'btn btn-secondary';
+          document.getElementById('formsubmit').setAttribute('disabled','') ;
+        }
+        function enableSubmit(){
+          document.getElementById('formsubmit').classList = 'btn btn-primary';
+          document.getElementById('formsubmit').removeAttribute('disabled') ;
+        }
     </script>
 
   </body>

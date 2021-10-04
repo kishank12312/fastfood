@@ -1,8 +1,8 @@
 from django.db.models import fields
-from django.forms import ModelForm, widgets
+from django.contrib.gis.forms import ModelForm, widgets
 from .models import *
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django import forms
+from django.contrib.gis import forms
 from django.contrib.auth.models import User
 from allauth.account.forms import SignupForm
 
@@ -32,7 +32,7 @@ class CustomerForm(ModelForm):
             visible.field.widget.attrs['class'] = 'form-control text-light'
     class Meta:
         model = Customer
-        fields = ['CustomerName', 'Address', 'DateOfBirth']
+        fields = ['CustomerName', 'DateOfBirth']
         labels = {
             'CustomerName': 'Please enter your First Name and Last Name separated by a space*:',
             'DateOfBirth': 'Your Date of Birth*:',

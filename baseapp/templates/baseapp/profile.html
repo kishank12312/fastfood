@@ -134,25 +134,6 @@
         </div>
         <br>
         <div class="row text-light" style="padding-left: 5%;">
-          <div class="col">
-            <span><p style="display: inline;" class="lead"><strong>Stored Address:</strong></p>&nbsp;&nbsp;
-              {% if customer.Address == '' %}
-              <p style="display: inline;" class="lead text-danger">You Have no stored address</p>
-              {% else %}
-              <p style="display: inline;" class="lead">{{ customer.Address }}</p></span>
-              {% endif %}
-            </div>
-            <div class="col">
-              {% if customer.Address == '' %}
-              <a href="{% url 'addressadd' %}" class="btn btn-primary">Add Address</a>
-              {% else %}
-              <a href="{% url 'addresschange'%}" class="btn btn-primary">Change Address</a>
-              <a href="{% url 'addressremove'%}" class="btn btn-danger">Remove Address</a>
-              {% endif %}
-            </div>
-        </div>
-        <br>
-        <div class="row text-light" style="padding-left: 5%;">
           <span><p style="display: inline;" class="lead"><strong>Total Number of Orders Placed:</strong></p>&nbsp;&nbsp;
             <p style="display: inline;" class="lead">{{ separateorders|length }}</p></span>
         </div>

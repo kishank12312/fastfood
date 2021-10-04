@@ -143,21 +143,7 @@
               <div class="col-10 col-sm-8 col-md-5 d-flex justify-content-center">
                 <form action="" method="POST">
                   {% csrf_token %}
-                  <div class="form-floating">
-                    <textarea class="form-control text-light" id='AddressField' required placeholder="placeholder" name="Address" style="height: 150px"></textarea>
-                    <label for="floatingTextarea2">Enter Delivery Address</label>
-                    <br>
-                    <div class="d-flex justify-content-center">
-                      <div id='popupmessage' class="alert bg-light" style="width: fit-content; color: #000 !important; display: none;" role="alert">
-                        <div class="d-flex align-items-center">
-                          <i class="bi bi-x-circle-fill" style="font-size: 2rem; color: rgb(255, 0, 0) !important;"></i> &nbsp; You have no stored address!
-                        </div>
-                      </div>
-                    </div>
-                    <a class="btn btn-primary" onclick="filladdress()">Add Existing Address</a>
-                    <br><br>
-                    <button type="submit" class="btn btn-success">CONFIRM ORDER AND MAKE PAYMENT</button> 
-                  </div>
+                  <button type="submit" class="btn btn-success">CONFIRM ORDER AND MAKE PAYMENT</button> 
                 </form>
             </div>
         </div>
