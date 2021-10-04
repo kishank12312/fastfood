@@ -156,7 +156,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
     <script>
       var greenIcon = new L.Icon({
-        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+        iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/images/marker-shadow.png',
         iconSize: [25, 41],
         iconAnchor: [12, 41],
@@ -174,8 +174,8 @@
       function mapfunction(map,options){
         L.Routing.control({
           waypoints: [
-            L.latLng(21.162910, 79.079655),
             L.latLng({{ u.Address.1 }}, {{ u.Address.0 }}),
+            L.latLng(21.162910, 79.079655),
           ],
           createMarker: function(i, wp, nWps) {
             if (i === 0) {
@@ -193,6 +193,7 @@
           draggableWaypoints: false,
           addWaypoints: false,
         }).addTo(map);
+        map.flyTo([{{ u.Address.1 }},{{ u.Address.0 }}],5, {animate: true, duration: 1});
       }
     </script>
     <script>

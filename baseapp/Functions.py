@@ -25,3 +25,4 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         u.is_staff = False
         if not u.email.split('@')[1] == "hyderabad.bits-pilani.ac.in":
             raise ImmediateHttpResponse(response=HttpResponse('You Can Login With Only BITS Mail Account!'))
+        return super(CustomSocialAccountAdapter, self).is_open_for_signup(request, sociallogin)
