@@ -484,12 +484,13 @@ def adminDashboard(request):
 
 
             cursor = connection.cursor()
-            cursor.execute('SELECT DATE_PART(\'week\', DATE("DateOrdered")) AS Week, SUM("ItemPrice"*"Qty") FROM PUBLIC.BASEAPP_ORDERS GROUP BY DATE_PART(\'week\', DATE("DateOrdered"));')
+            cursor.execute('SELECT DATE_PART(\'week\', DATE("DateOrdered")) AS Week, SUM("ItemPrice"*"Qty") FROM PUBLIC.BASEAPP_ORDERS GROUP BY DATE_PART(\'week\', DATE("DateOrdered")) ORDER BY Week;')
             row = cursor.fetchall()
             weeklabels,weekvalues = [],[]
             for i in row:
                 weeklabels.append('Week ' + str(int(i[0])))
                 weekvalues.append(int(i[1]))
+            #print(weeklabels,weekvalues)
             context['weeklabels'] = weeklabels
             context['weekvalues'] = weekvalues
             return render(request, 'baseapp/adminDashboard.html', context)
