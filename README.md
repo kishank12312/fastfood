@@ -14,7 +14,7 @@ FastFood Online is a mock webapp which lets you place orders for burgers, pizzas
  - View route map between user's location and pickup point
  - View history of all past orders made from your account
  - View invoice for each order made
- - Admin dashboard panel with analytics such as total revenue, graphs depciting sales (with the help of Chart.js), all received orders, and all registered customers.
+ - Admin dashboard panel with analytics such as total revenue, graphs depicting sales (with the help of Chart.js), all received orders, and all registered customers.
 
 **Additional Dependecies: ** GIS Libraries: GDAL, PROJ and GEOS. 
 Installed with the help of heroku-geo-buildpack (https://github.com/heroku/heroku-geo-buildpack)
