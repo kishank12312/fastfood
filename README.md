@@ -5,9 +5,9 @@ FastFood Online is a mock webapp which lets you place orders for burgers, pizzas
 **Features**
  - Create account
  - Login/Logout
- - Email verfication for non social accounts
  - Login with Google OAuth (BITSMails only)
- - Stores user location at the time of registering with the help of the browser's GeoLocation API
+ - Email verfication for non social accounts
+ - Store user location at the time of registering with the help of the browser's GeoLocation API
  - Browse the menu to see the items that can be ordered
  - Add items to cart, Increase/Decrease quantity per item
  - Checkout cart/Place order
