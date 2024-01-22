@@ -19,4 +19,4 @@ FastFood Online is a mock webapp which lets you place orders for burgers, pizzas
 **Additional Dependecies:** GIS Libraries: GDAL, PROJ and GEOS. 
 Installed with the help of heroku-geo-buildpack (https://github.com/heroku/heroku-geo-buildpack)
 
-Hosted on Heroku at https://ffonline253.herokuapp.com/
+Hosted on Heroku at https://ffonline253.herokuapp.com/ [Deprecated]
